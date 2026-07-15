@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Supabase — public (safe to expose to browser)
+
+# Supabase — server only, never expose to client
+
+# GoHighLevel — server only, never expose to client

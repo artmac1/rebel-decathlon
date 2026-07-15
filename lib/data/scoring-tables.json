@@ -1,0 +1,506 @@
+[
+  {
+    "event_key": "whr",
+    "display_name": "Waist-to-Hip Ratio",
+    "input_unit": "ratio (waist ÷ hip, decimal)",
+    "gender_split": true,
+    "age_split": false,
+    "bands": {
+      "male": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 10},
+        {"threshold": 0.85, "points": 10},
+        {"threshold": 0.86, "points": 7.5},
+        {"threshold": 0.91, "points": 5},
+        {"threshold": 0.96, "points": 2.5},
+        {"threshold": 1.005, "points": 0},
+        {"threshold": 100, "points": 0}
+      ],
+      "female": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 10},
+        {"threshold": 0.75, "points": 10},
+        {"threshold": 0.76, "points": 7.5},
+        {"threshold": 0.81, "points": 5},
+        {"threshold": 0.86, "points": 2.5},
+        {"threshold": 0.905, "points": 0},
+        {"threshold": 100, "points": 0}
+      ]
+    },
+    "notes": "Lower ratio = better score (VLOOKUP ascending). Display table labels the male cutoff as '> 1.00' for 0 pts and '0.96–1.00' for 2.5 pts, but the lookup threshold is 1.005 — meaning a ratio of exactly 1.00 scores 2.5 pts (not 0). Similarly, female display says '> 0.90' for 0 pts but lookup uses 0.905, so exactly 0.90 scores 2.5 pts. The offsets appear intentional: they make the displayed ranges (0.96–1.00 = 2.5 pts) mathematically precise. The sentinel 'a' represents non-numeric or blank input."
+  },
+  {
+    "event_key": "pushup",
+    "display_name": "Push-Up Challenge (4 minutes)",
+    "input_unit": "repetitions",
+    "gender_split": false,
+    "age_split": true,
+    "bands": {
+      "50-59": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 17, "points": 0},
+        {"threshold": 18, "points": 1},
+        {"threshold": 25, "points": 2},
+        {"threshold": 32, "points": 3},
+        {"threshold": 39, "points": 4},
+        {"threshold": 49, "points": 5},
+        {"threshold": 60, "points": 6},
+        {"threshold": 70, "points": 7},
+        {"threshold": 77, "points": 8},
+        {"threshold": 84, "points": 9},
+        {"threshold": 91, "points": 10}
+      ],
+      "60-69": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 14, "points": 0},
+        {"threshold": 15, "points": 1},
+        {"threshold": 21, "points": 2},
+        {"threshold": 27, "points": 3},
+        {"threshold": 33, "points": 4},
+        {"threshold": 42, "points": 5},
+        {"threshold": 51, "points": 6},
+        {"threshold": 60, "points": 7},
+        {"threshold": 66, "points": 8},
+        {"threshold": 72, "points": 9},
+        {"threshold": 78, "points": 10}
+      ],
+      "70+": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 11, "points": 0},
+        {"threshold": 12, "points": 1},
+        {"threshold": 18, "points": 2},
+        {"threshold": 23, "points": 3},
+        {"threshold": 28, "points": 4},
+        {"threshold": 35, "points": 5},
+        {"threshold": 43, "points": 6},
+        {"threshold": 50, "points": 7},
+        {"threshold": 55, "points": 8},
+        {"threshold": 60, "points": 9},
+        {"threshold": 65, "points": 10}
+      ]
+    },
+    "notes": "Applies equally to males and females. Females use modified (knee) push-up. Rests allowed; clock does not stop. Points range 0–10."
+  },
+  {
+    "event_key": "squat",
+    "display_name": "Chair Squat Test (30 seconds)",
+    "input_unit": "repetitions",
+    "gender_split": true,
+    "age_split": true,
+    "bands": {
+      "male": {
+        "50-59": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 10, "points": 2},
+          {"threshold": 14, "points": 4},
+          {"threshold": 18, "points": 6},
+          {"threshold": 22, "points": 8},
+          {"threshold": 27, "points": 10}
+        ],
+        "60-64": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 9, "points": 2},
+          {"threshold": 12, "points": 4},
+          {"threshold": 15, "points": 6},
+          {"threshold": 20, "points": 8},
+          {"threshold": 25, "points": 10}
+        ],
+        "65-69": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 8, "points": 2},
+          {"threshold": 11, "points": 4},
+          {"threshold": 14, "points": 6},
+          {"threshold": 19, "points": 8},
+          {"threshold": 24, "points": 10}
+        ],
+        "70-74": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 7, "points": 2},
+          {"threshold": 10, "points": 4},
+          {"threshold": 13, "points": 6},
+          {"threshold": 18, "points": 8},
+          {"threshold": 23, "points": 10}
+        ],
+        "75-79": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 6, "points": 2},
+          {"threshold": 9, "points": 4},
+          {"threshold": 12, "points": 6},
+          {"threshold": 18, "points": 8},
+          {"threshold": 22, "points": 10}
+        ],
+        "80-84": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 5, "points": 2},
+          {"threshold": 8, "points": 4},
+          {"threshold": 11, "points": 6},
+          {"threshold": 16, "points": 8},
+          {"threshold": 21, "points": 10}
+        ],
+        "85-89": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 4, "points": 2},
+          {"threshold": 7, "points": 4},
+          {"threshold": 10, "points": 6},
+          {"threshold": 15, "points": 8},
+          {"threshold": 20, "points": 10}
+        ],
+        "90+": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 3, "points": 2},
+          {"threshold": 6, "points": 4},
+          {"threshold": 9, "points": 6},
+          {"threshold": 13, "points": 8},
+          {"threshold": 19, "points": 10}
+        ]
+      },
+      "female": {
+        "50-59": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 10, "points": 2},
+          {"threshold": 13, "points": 4},
+          {"threshold": 15, "points": 6},
+          {"threshold": 20, "points": 8},
+          {"threshold": 25, "points": 10}
+        ],
+        "60-64": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 9, "points": 2},
+          {"threshold": 11, "points": 4},
+          {"threshold": 13, "points": 6},
+          {"threshold": 18, "points": 8},
+          {"threshold": 23, "points": 10}
+        ],
+        "65-69": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 8, "points": 2},
+          {"threshold": 10, "points": 4},
+          {"threshold": 12, "points": 6},
+          {"threshold": 17, "points": 8},
+          {"threshold": 22, "points": 10}
+        ],
+        "70-74": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 7, "points": 2},
+          {"threshold": 9, "points": 4},
+          {"threshold": 11, "points": 6},
+          {"threshold": 16, "points": 8},
+          {"threshold": 21, "points": 10}
+        ],
+        "75-79": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 6, "points": 2},
+          {"threshold": 8, "points": 4},
+          {"threshold": 10, "points": 6},
+          {"threshold": 16, "points": 8},
+          {"threshold": 20, "points": 10}
+        ],
+        "80-84": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 5, "points": 2},
+          {"threshold": 7, "points": 4},
+          {"threshold": 9, "points": 6},
+          {"threshold": 15, "points": 8},
+          {"threshold": 19, "points": 10}
+        ],
+        "85-89": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 4, "points": 2},
+          {"threshold": 6, "points": 4},
+          {"threshold": 8, "points": 6},
+          {"threshold": 14, "points": 8},
+          {"threshold": 18, "points": 10}
+        ],
+        "90+": [
+          {"threshold": "a", "points": 0},
+          {"threshold": 0, "points": 0},
+          {"threshold": 3, "points": 2},
+          {"threshold": 5, "points": 4},
+          {"threshold": 7, "points": 6},
+          {"threshold": 12, "points": 8},
+          {"threshold": 17, "points": 10}
+        ]
+      }
+    },
+    "notes": "Points are 0, 2, 4, 6, 8, or 10 only (no 1, 3, 5, 7, 9). Women age 60–64: threshold for 10 pts is 23 reps (per display table header '23+'); the original lookup value of 24 was a sheet error."
+  },
+  {
+    "event_key": "hr",
+    "display_name": "Home Step Test (Heart Rate)",
+    "input_unit": "BPM (beats per minute, 15-second count × 4)",
+    "gender_split": false,
+    "age_split": true,
+    "bands": {
+      "50-55": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 40, "points": 10},
+        {"threshold": 86, "points": 10},
+        {"threshold": 87, "points": 9},
+        {"threshold": 98, "points": 8},
+        {"threshold": 106, "points": 7},
+        {"threshold": 117, "points": 5},
+        {"threshold": 123, "points": 3},
+        {"threshold": 133, "points": 1},
+        {"threshold": 141, "points": 0}
+      ],
+      "56-65": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 40, "points": 10},
+        {"threshold": 85, "points": 10},
+        {"threshold": 86, "points": 9},
+        {"threshold": 98, "points": 8},
+        {"threshold": 104, "points": 7},
+        {"threshold": 113, "points": 5},
+        {"threshold": 121, "points": 3},
+        {"threshold": 130, "points": 1},
+        {"threshold": 138, "points": 0}
+      ],
+      "66+": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 40, "points": 10},
+        {"threshold": 87, "points": 10},
+        {"threshold": 88, "points": 9},
+        {"threshold": 97, "points": 8},
+        {"threshold": 104, "points": 7},
+        {"threshold": 114, "points": 5},
+        {"threshold": 121, "points": 3},
+        {"threshold": 131, "points": 1},
+        {"threshold": 137, "points": 0}
+      ]
+    },
+    "notes": "Lower BPM = better score, but the lookup is still applied as VLOOKUP ascending — points decrease as BPM increases. The age bands for this event differ from all others: 50–55, 56–65, 66+ (not 50–59, 60–69, 70+). Ages 70+ use the 66+ table. 'Unable to complete test' maps to non-numeric input (sentinel 'a') = 0 pts, same as very high BPM. The points scale is non-linear: 0, 1, 3, 5, 7, 8, 9, 10 (no 2, 4, or 6)."
+  },
+  {
+    "event_key": "situp",
+    "display_name": "Sit-Up Challenge (3 minutes)",
+    "input_unit": "repetitions",
+    "gender_split": false,
+    "age_split": true,
+    "bands": {
+      "50-59": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 35, "points": 1},
+        {"threshold": 46, "points": 2},
+        {"threshold": 56, "points": 3},
+        {"threshold": 67, "points": 4},
+        {"threshold": 77, "points": 5},
+        {"threshold": 84, "points": 6},
+        {"threshold": 91, "points": 7},
+        {"threshold": 98, "points": 8},
+        {"threshold": 105, "points": 9},
+        {"threshold": 112, "points": 10}
+      ],
+      "60-69": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 30, "points": 1},
+        {"threshold": 39, "points": 2},
+        {"threshold": 48, "points": 3},
+        {"threshold": 57, "points": 4},
+        {"threshold": 66, "points": 5},
+        {"threshold": 72, "points": 6},
+        {"threshold": 78, "points": 7},
+        {"threshold": 84, "points": 8},
+        {"threshold": 90, "points": 9},
+        {"threshold": 96, "points": 10}
+      ],
+      "70+": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 25, "points": 1},
+        {"threshold": 33, "points": 2},
+        {"threshold": 40, "points": 3},
+        {"threshold": 48, "points": 4},
+        {"threshold": 55, "points": 5},
+        {"threshold": 60, "points": 6},
+        {"threshold": 65, "points": 7},
+        {"threshold": 70, "points": 8},
+        {"threshold": 75, "points": 9},
+        {"threshold": 80, "points": 10}
+      ]
+    },
+    "notes": "Applies equally to males and females. Rests allowed; clock does not stop. From lying position with arms folded, sit to grab shins (V-position) and return. Points range 0–10."
+  },
+  {
+    "event_key": "sit_rise",
+    "display_name": "Sitting-Rising Test (SRT)",
+    "input_unit": "number of supports used (counted separately for sitting and rising)",
+    "gender_split": false,
+    "age_split": false,
+    "scoring_method": "two_part_sum",
+    "scoring_description": "Apply the lookup once for sitting (number of supports used to lower to floor) and once for rising (number of supports used to stand up). Total score = sitting_points + rising_points. Max = 5 + 5 = 10. Deduct 0.5 pts for unsteadiness in either direction (applied before lookup). Supports counted: hands, knees, side of leg, forearm, etc. — each counts as 1.",
+    "breakpoints": [
+      {"threshold": "a", "points": 0},
+      {"threshold": "z", "points": 0},
+      {"threshold": 0, "points": 5},
+      {"threshold": 1, "points": 4},
+      {"threshold": 2, "points": 3},
+      {"threshold": 3, "points": 2},
+      {"threshold": 4, "points": 1}
+    ],
+    "notes": "Two non-numeric sentinels: 'a' = invalid/blank input (0 pts); 'z' = unable to complete the movement (0 pts). The display shows '4 or more supports = 1 pt'; the lookup only has threshold 4→1, so 5+ supports also returns 1 pt via VLOOKUP approximate match."
+  },
+  {
+    "event_key": "balance",
+    "display_name": "Stork Test (Balance)",
+    "input_unit": "seconds",
+    "gender_split": false,
+    "age_split": false,
+    "breakpoints": [
+      {"threshold": "a", "points": 0},
+      {"threshold": 0, "points": 0},
+      {"threshold": 9, "points": 0},
+      {"threshold": 10, "points": 2.5},
+      {"threshold": 25, "points": 5},
+      {"threshold": 40, "points": 7.5},
+      {"threshold": 50, "points": 10}
+    ],
+    "notes": "Ratings: Poor < 10s (0 pts), Fair 10–24s (2.5 pts), Average 25–39s (5 pts), Good 40–49s (7.5 pts), Excellent ≥ 50s (10 pts). The original lookup threshold of 51 was a sheet error; 50 seconds is confirmed as the Excellent threshold."
+  },
+  {
+    "event_key": "speed",
+    "display_name": "1-Mile Walk Test",
+    "input_unit": "MPH (miles per hour, sustained comfortable walking speed)",
+    "gender_split": false,
+    "age_split": true,
+    "bands": {
+      "50-59": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 2, "points": 3},
+        {"threshold": 3, "points": 4},
+        {"threshold": 3.5, "points": 5},
+        {"threshold": 4, "points": 6},
+        {"threshold": 4.3, "points": 7},
+        {"threshold": 4.6, "points": 8},
+        {"threshold": 5, "points": 9},
+        {"threshold": 5.5, "points": 10},
+        {"threshold": 6, "points": 10}
+      ],
+      "60-69": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 2, "points": 4},
+        {"threshold": 3, "points": 5},
+        {"threshold": 3.5, "points": 6},
+        {"threshold": 4, "points": 7},
+        {"threshold": 4.3, "points": 8},
+        {"threshold": 4.6, "points": 9},
+        {"threshold": 5, "points": 10},
+        {"threshold": 5.5, "points": 10},
+        {"threshold": 6, "points": 10}
+      ],
+      "70+": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 2, "points": 5},
+        {"threshold": 3, "points": 6},
+        {"threshold": 3.5, "points": 7},
+        {"threshold": 4, "points": 8},
+        {"threshold": 4.3, "points": 9},
+        {"threshold": 4.6, "points": 10},
+        {"threshold": 5, "points": 10},
+        {"threshold": 5.5, "points": 10},
+        {"threshold": 6, "points": 10}
+      ]
+    },
+    "notes": "Unable to complete the 1-mile walk = 0 pts (sentinel 'a' = 0, consistent with instructions and display table). Any speed between 0 and 2 MPH (exclusive) also returns 0 pts via the threshold 0 → 0 row."
+  },
+  {
+    "event_key": "arm_hang",
+    "display_name": "Dead Hang / Arm Hang (Grip Test)",
+    "input_unit": "seconds (total hang time)",
+    "gender_split": true,
+    "age_split": false,
+    "bands": {
+      "male": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 12, "points": 1},
+        {"threshold": 24, "points": 2},
+        {"threshold": 36, "points": 3},
+        {"threshold": 48, "points": 4},
+        {"threshold": 60, "points": 5},
+        {"threshold": 72, "points": 6},
+        {"threshold": 84, "points": 7},
+        {"threshold": 96, "points": 8},
+        {"threshold": 108, "points": 9},
+        {"threshold": 120, "points": 10}
+      ],
+      "female": [
+        {"threshold": "a", "points": 0},
+        {"threshold": 0, "points": 0},
+        {"threshold": 9, "points": 1},
+        {"threshold": 18, "points": 2},
+        {"threshold": 27, "points": 3},
+        {"threshold": 36, "points": 4},
+        {"threshold": 45, "points": 5},
+        {"threshold": 54, "points": 6},
+        {"threshold": 63, "points": 7},
+        {"threshold": 72, "points": 8},
+        {"threshold": 81, "points": 9},
+        {"threshold": 90, "points": 10}
+      ]
+    },
+    "notes": "Custom gender-split table created by Art McDermott. Men: max 2:00 (120s) = 10 pts, 12-second intervals. Women: max 1:30 (90s) = 10 pts, 9-second intervals. Score of 0 for anyone who cannot hold for at least 12s (men) or 9s (women). The original unisex sheet table is superseded by this version."
+  },
+  {
+    "event_key": "flexibility",
+    "display_name": "General Flexibility (5 Bilateral Tests)",
+    "input_unit": "pass/fail per side for each of 5 tests",
+    "gender_split": false,
+    "age_split": false,
+    "scoring_method": "bilateral_binary_sum",
+    "scoring_description": "Each of the 5 tests is scored bilaterally (right side and left side independently). Each side earns 1 point if the target range of motion is achieved, 0 if not. Total = sum of all 10 binary scores. Maximum = 10.",
+    "tests": [
+      {
+        "name": "Sagittal Hamstring",
+        "target": "90 degrees (leg raised straight up to horizontal)",
+        "points_per_side": 1
+      },
+      {
+        "name": "Piriformis (Hip Rotation)",
+        "target": "0 degrees / horizontal to the body (shin parallel to waist from 90° thigh position)",
+        "points_per_side": 1
+      },
+      {
+        "name": "Quadriceps",
+        "target": "120 degrees of knee flexion or heel touching buttocks",
+        "points_per_side": 1
+      },
+      {
+        "name": "Hip Flexor — Modified Thomas Test",
+        "target": "Free leg femur at horizon level or below while opposite knee held to chest at table edge",
+        "points_per_side": 1
+      },
+      {
+        "name": "Back Scratch Test",
+        "target": "Fingertips of both hands touching (or within 3 inches)",
+        "points_per_side": 1
+      }
+    ],
+    "notes": "No lookup table in the sheet — scoring is purely binary per side per test. The Back Scratch Test description adds nuance: the sheet states 'if the hands come within three inches of each other, points can be earned for that' but the primary standard appears to be fingertips touching. The threshold for partial credit (within 3 inches) should be clarified."
+  }
+]
