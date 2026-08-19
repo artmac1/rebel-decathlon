@@ -32,15 +32,17 @@ export default async function WelcomePage({
           Watch this short intro before you begin.
         </p>
 
-        <div className="aspect-video rounded-2xl overflow-hidden mb-6 bg-black">
-          <iframe
-            src={`https://player.vimeo.com/video/${INTRO_VIMEO_ID}`}
-            title="Rebel Decathlon introduction"
-            className="w-full h-full"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
+        {INTRO_VIMEO_ID !== 'TODO' && (
+          <div className="aspect-video rounded-2xl overflow-hidden mb-6 bg-black">
+            <iframe
+              src={`https://player.vimeo.com/video/${INTRO_VIMEO_ID}`}
+              title="Rebel Decathlon introduction"
+              className="w-full h-full"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
 
         <Link
           href={`/test/${attemptId}`}
@@ -51,7 +53,7 @@ export default async function WelcomePage({
 
         <Link
           href={`/test/${attemptId}`}
-          className="block w-full text-center text-sm text-gray-400 hover:text-gray-600"
+          className="block w-full text-center text-sm text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
         >
           Skip
         </Link>
