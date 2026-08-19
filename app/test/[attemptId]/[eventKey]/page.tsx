@@ -44,6 +44,17 @@ export default async function EventPage({
           <h1 className="text-2xl font-bold text-gray-900">{instruction.displayName}</h1>
         </div>
 
+        {instruction.vimeoId && instruction.vimeoId !== 'TODO' && (
+          <div className="mb-6 aspect-video rounded-2xl overflow-hidden bg-black">
+            <iframe
+              src={`https://player.vimeo.com/video/${instruction.vimeoId}`}
+              className="w-full h-full"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
+
         <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-6">
           <h2 className="text-sm font-semibold text-gray-700 mb-3">Instructions</h2>
           <ol className="space-y-2">
@@ -58,16 +69,6 @@ export default async function EventPage({
             <p className="mt-4 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
               {instruction.note}
             </p>
-          )}
-          {instruction.videoUrl && (
-            <a
-              href={instruction.videoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-block text-xs text-blue-600 underline"
-            >
-              Watch demonstration video
-            </a>
           )}
         </div>
 
