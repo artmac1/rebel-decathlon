@@ -17,6 +17,8 @@ describe('EVENT_INSTRUCTIONS', () => {
         entry.vimeoId!.length,
         `${key}.vimeoId should not be empty`
       ).toBeGreaterThan(0)
+      // Once all videos are uploaded to Vimeo, uncomment this:
+      // expect(entry.vimeoId, `${key}.vimeoId is still a placeholder`).not.toBe('TODO')
     }
   })
 })
