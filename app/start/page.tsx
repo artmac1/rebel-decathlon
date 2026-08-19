@@ -42,7 +42,7 @@ export default function StartPage() {
       return
     }
 
-    router.push(`/test/${result.attemptId!}`)
+    router.push(`/test/${result.attemptId!}/welcome`)
   }
 
   return (
