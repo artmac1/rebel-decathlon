@@ -48,6 +48,7 @@ export default async function EventPage({
           <div className="mb-6 aspect-video rounded-2xl overflow-hidden bg-black">
             <iframe
               src={`https://player.vimeo.com/video/${instruction.vimeoId}`}
+              title={`${instruction.displayName} demonstration video`}
               className="w-full h-full"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
