@@ -5,12 +5,13 @@ export type EventInstruction = {
   displayName: string
   instructions: string[]
   note?: string
-  videoUrl?: string
+  vimeoId?: string
 }
 
 export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
   whr: {
     displayName: 'Waist-to-Hip Ratio',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Using a non-stretching, cloth tape measure, determine a waist and hip circumference as described below. Divide the waist measurement by the hip measurement to calculate the ratio.',
       'The waist is most conveniently measured at the smallest circumference of the natural waist, usually just above the belly button.',
@@ -22,6 +23,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   pushup: {
     displayName: 'Push-Up Challenge (4 minutes)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Execute as many repetitions as possible in a 4-minute time period. Rests are allowed, but the clock does NOT stop.',
       'Place a pad or soft object underneath the torso, not more than 3 inches high. A repetition is NOT counted unless the torso touches the pad.',
@@ -33,6 +35,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   squat: {
     displayName: 'Chair Squat Test (30 seconds)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Stand with feet approximately shoulder-width apart, with the back of the legs in contact with a standard-height chair (roughly 17 inches high).',
       'Fold your arms across the chest. Sit in the chair and immediately return to a standing position as quickly as possible.',
@@ -44,6 +47,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   hr: {
     displayName: 'Home Step Test (Heart Rate)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Step up and down, one foot at a time, onto a 12″ step or bench for 3 minutes. (Individuals over age 70 should use an 8″ step; if over 80 the test can be limited to 2:30.)',
       'Maintain a steady four-beat cycle — approximately 22 to 24 steps per minute. Use a metronome app to keep the pace.',
@@ -55,6 +59,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   situp: {
     displayName: 'Sit-Up Challenge (3 minutes)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Lie on your back on a firm but padded surface. Bend your elbows so your arms rest on your torso with fists underneath the chin — this is the start and end position.',
       'When the clock starts, bend your knees and raise your torso to form a "V" shape. Grab your shins, then return to the supine position. That is one repetition.',
@@ -66,6 +71,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   sit_rise: {
     displayName: 'Sitting-Rising Test (SRT)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Begin standing on a comfortable mat or padded surface. Without using any support, lower yourself to a seated position on the floor with legs extended in front of you.',
       'When ready, return to a standing position.',
@@ -73,12 +79,12 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
       '2–3 coached trials are encouraged. Record the best result.',
       'Maximum total = 5 (sitting) + 5 (rising) = 10 points.',
     ],
-    videoUrl: 'http://www.youtube.com/watch?v=MCQ2WA2T2oA',
     note: 'Speed is not important. This test measures general mobility and relative body strength.',
   },
 
   balance: {
     displayName: 'Stork Test (Balance)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Remove your shoes. Choose which leg to stand on — typically the dominant side produces a better score, but try both if needed.',
       'Place your hands on your hips. Raise the non-standing foot and rest it against the inside of the standing knee.',
@@ -90,6 +96,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   speed: {
     displayName: '1-Mile Walk Test',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'The goal is to establish a sustainable walking speed the individual can comfortably maintain day-to-day.',
       'This test is ideally performed on a treadmill so all variables can be controlled.',
@@ -101,6 +108,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   arm_hang: {
     displayName: 'Dead Hang / Arm Hang (Grip Test)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Grip an overhead bar with both hands, palms facing away (overhand grip), arms fully extended.',
       'Lift your feet off the ground and hold the position for as long as possible.',
@@ -112,6 +120,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   flexibility: {
     displayName: 'General Flexibility (5 Bilateral Tests)',
+    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
     instructions: [
       'Lie on a comfortable padded surface. A partner/trainer assists with each movement. Never force range of motion — movements should be uncomfortable but NOT painful.',
       '1. Sagittal Hamstring — Lying on your back, raise one leg straight up to 90°. Repeat the other side. Each side that cannot reach 90° loses 1 point.',
