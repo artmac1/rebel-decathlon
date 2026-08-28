@@ -2,6 +2,9 @@ import { createServiceClient } from '@/lib/supabase'
 import { ALL_EVENT_KEYS, EVENT_INSTRUCTIONS } from '@/lib/event-instructions'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
+import EmailResultsForm from './EmailResultsForm'
+import PrintButton from './PrintButton'
 
 // ─── Band labels (every 10-point range) ─────────────────────────────────────
 
@@ -207,17 +210,38 @@ export default async function ResultsPage({
     : null
   const totalDelta = priorTotal !== null ? total - priorTotal : null
 
+  const emailPayload = {
+    participantName,
+    total,
+    bandLabel: band.label,
+    completedAt,
+    attemptId,
+    scores: scores.map((s) => ({ label: s.label, points: s.points })),
+  }
+
+  const bookingUrl = process.env.BOOKING_URL ?? '#'
+  const weakestEventLabel = primaryFocus[0]?.label ?? 'your lowest-scoring event'
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="max-w-lg mx-auto px-4 py-8 space-y-4">
 
-        {/* Back link */}
-        <Link
-          href={`/test/${attemptId}`}
-          className="text-sm text-gray-500 hover:text-gray-700 inline-block"
-        >
-          ← Back to dashboard
-        </Link>
+        {/* Back link + SAA icon */}
+        <div className="flex items-center justify-between">
+          <Link
+            href={`/test/${attemptId}`}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            ← Back to dashboard
+          </Link>
+          <Image
+            src="/saa-icon.png"
+            alt="Successful Aging Academy"
+            width={40}
+            height={40}
+            className="object-contain"
+          />
+        </div>
 
         {/* Header */}
         <div>
@@ -360,6 +384,37 @@ export default async function ResultsPage({
             </div>
           </div>
         )}
+
+        {/* ── Email results ── */}
+        <EmailResultsForm payload={emailPayload} />
+
+        {/* ── CTA card ── */}
+        <div className="bg-white border border-gray-200 rounded-2xl px-5 py-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">Turn your results into a plan</h2>
+          <p className="text-sm text-gray-600 leading-relaxed mb-5">
+            Your {weakestEventLabel} score is your biggest opportunity right now. That&apos;s not a
+            criticism — it&apos;s a target. The fastest way to move that number is to stop guessing
+            and put a structured plan in place. That&apos;s exactly what we do together.
+          </p>
+          <div className="flex gap-3">
+            <PrintButton />
+            <Link
+              href={bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white text-center hover:bg-gray-700 transition-colors"
+            >
+              Book a session →
+            </Link>
+          </div>
+        </div>
+
+        {/* ── Progress history link ── */}
+        <div className="text-center pb-2">
+          <Link href="/progress" className="text-sm text-gray-400 hover:text-gray-600">
+            View your full history →
+          </Link>
+        </div>
 
       </div>
     </main>
