@@ -11,6 +11,14 @@ export type EmailPayload = {
   scores: Array<{ label: string; points: number }>
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
 export async function sendResultsEmail(
   email: string,
   payload: EmailPayload
@@ -25,7 +33,7 @@ export async function sendResultsEmail(
     .map(
       (s) =>
         `<tr>
-          <td style="padding:6px 12px;border-bottom:1px solid #f0f0f0">${s.label}</td>
+          <td style="padding:6px 12px;border-bottom:1px solid #f0f0f0">${escapeHtml(s.label)}</td>
           <td style="padding:6px 12px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:bold">${s.points}/10</td>
         </tr>`
     )
@@ -35,13 +43,13 @@ export async function sendResultsEmail(
     <!DOCTYPE html>
     <html>
       <body style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111">
-        <h2 style="margin:0 0 4px">${payload.participantName}'s Rebel Decathlon Results</h2>
-        ${payload.completedAt ? `<p style="color:#888;margin:0 0 24px;font-size:14px">Completed ${payload.completedAt}</p>` : ''}
+        <h2 style="margin:0 0 4px">${escapeHtml(payload.participantName)}'s Rebel Decathlon Results</h2>
+        ${payload.completedAt ? `<p style="color:#888;margin:0 0 24px;font-size:14px">Completed ${escapeHtml(payload.completedAt)}</p>` : ''}
 
         <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:24px;text-align:center;margin-bottom:24px">
           <p style="font-size:56px;font-weight:bold;margin:0 0 4px">${payload.total}</p>
           <p style="color:#6b7280;font-size:14px;margin:0 0 8px">out of 100 points</p>
-          <p style="font-weight:bold;font-size:18px;margin:0">${payload.bandLabel}</p>
+          <p style="font-weight:bold;font-size:18px;margin:0">${escapeHtml(payload.bandLabel)}</p>
         </div>
 
         <p style="margin-bottom:24px">
@@ -59,6 +67,9 @@ export async function sendResultsEmail(
   `
 
   try {
+    if (!process.env.RESEND_API_KEY) {
+      return { error: 'Email service is not configured.' }
+    }
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL ?? 'results@rebelworkout.com',

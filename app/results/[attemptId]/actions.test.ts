@@ -26,6 +26,8 @@ const payload = {
 
 describe('sendResultsEmail', () => {
   beforeEach(() => {
+    process.env.RESEND_API_KEY = 'test-key'
+    mockSend.mockClear()
     mockSend.mockResolvedValue({ error: null })
   })
 
@@ -46,20 +48,20 @@ describe('sendResultsEmail', () => {
 
   it('calls Resend with correct subject containing participant name and date', async () => {
     await sendResultsEmail('jane@example.com', payload)
-    const callArgs = mockSend.mock.calls[0][0]
+    const callArgs = mockSend.mock.lastCall![0]
     expect(callArgs.subject).toContain('Jane')
     expect(callArgs.subject).toContain('August 1, 2026')
   })
 
   it('calls Resend with html containing the results URL', async () => {
     await sendResultsEmail('jane@example.com', payload)
-    const callArgs = mockSend.mock.calls[0][0]
+    const callArgs = mockSend.mock.lastCall![0]
     expect(callArgs.html).toContain('abc-123')
   })
 
   it('calls Resend with html containing all event scores', async () => {
     await sendResultsEmail('jane@example.com', payload)
-    const callArgs = mockSend.mock.calls[0][0]
+    const callArgs = mockSend.mock.lastCall![0]
     expect(callArgs.html).toContain('Push-Up Test')
     expect(callArgs.html).toContain('Squat Test')
   })
@@ -74,5 +76,13 @@ describe('sendResultsEmail', () => {
     mockSend.mockRejectedValueOnce(new Error('network failure'))
     const result = await sendResultsEmail('jane@example.com', payload)
     expect(result).toEqual({ error: 'Failed to send email. Please try again.' })
+  })
+
+  it('escapes HTML special characters in participant name', async () => {
+    const xssPayload = { ...payload, participantName: 'Jane <b>Bold</b>' }
+    await sendResultsEmail('jane@example.com', xssPayload)
+    const callArgs = mockSend.mock.lastCall![0]
+    expect(callArgs.html).toContain('Jane &lt;b&gt;Bold&lt;/b&gt;')
+    expect(callArgs.html).not.toContain('<b>Bold</b>')
   })
 })
