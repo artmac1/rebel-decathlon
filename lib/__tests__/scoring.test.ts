@@ -137,47 +137,78 @@ describe('Squat', () => {
 })
 
 // ---------------------------------------------------------------------------
-// HR — age split (50-55, 56-65, 66+), lower BPM = better
-// Input: { bpm }
+// HR — two-part score: BPM (0-5 pts) + recovery drop (0-5 pts) = 0-10 total
+// Input: { bpm, recovery_bpm }
+// BPM bands (50-55, 56-65, 66+): collapsed from 10-tier to 5-tier
+//   50-55: ≤97=5, 98-116=4, 117-122=3, 123-132=2, 133-140=1, 141+=0
+//   56-65: ≤97=5, 98-112=4, 113-120=3, 121-129=2, 130-137=1, 138+=0
+//   66+:   ≤96=5, 97-113=4, 114-120=3, 121-130=2, 131-136=1, 137+=0
+// Recovery (drop = bpm - recovery_bpm):
+//   <15=0, 15-19=1, 20-24=2, 25-29=3, 30-34=4, ≥35=5
 // ---------------------------------------------------------------------------
 describe('HR (Home Step Test)', () => {
-  // Mid-band
-  it('age 53, bpm 100 → 8 pts (50-55: 98→8, 106→7)', () => {
-    expect(scoreEvent('hr', { bpm: 100 }, 53, 'male')).toBe(8)
+  // BPM tier boundaries — 50-55 band (use drop=20 for recovery=2 pts throughout)
+  it('age 53, bpm 80 → bpm_score 5, drop 20 → recovery 2 → total 7', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 60 }, 53, 'male')).toBe(7)
   })
-  it('age 60, bpm 108 → 7 pts (56-65: 104→7, 113→5)', () => {
-    expect(scoreEvent('hr', { bpm: 108 }, 60, 'female')).toBe(7)
+  it('boundary: age 53, bpm 97 → bpm_score 5 (top of 5-pt tier)', () => {
+    expect(scoreEvent('hr', { bpm: 97, recovery_bpm: 77 }, 53, 'male')).toBe(7)
   })
-  it('age 70, bpm 95 → 8 pts (66+: 97→8... wait: 88→9, 97→8)', () => {
-    // 66+ band: 88→9, 97→8. bpm=95: largest threshold ≤ 95 is 88 → 9 pts
-    expect(scoreEvent('hr', { bpm: 95 }, 70, 'male')).toBe(9)
+  it('boundary: age 53, bpm 98 → bpm_score 4 (first threshold of 4-pt tier)', () => {
+    expect(scoreEvent('hr', { bpm: 98, recovery_bpm: 78 }, 53, 'male')).toBe(6)
   })
-
-  // Boundaries: the 10→9 cutoff for each band
-  it('boundary: age 53, bpm 86 → 10 pts (50-55 max cutoff)', () => {
-    expect(scoreEvent('hr', { bpm: 86 }, 53, 'male')).toBe(10)
+  it('age 53, bpm 100 → bpm_score 4, drop 20 → recovery 2 → total 6', () => {
+    expect(scoreEvent('hr', { bpm: 100, recovery_bpm: 80 }, 53, 'male')).toBe(6)
   })
-  it('boundary: age 53, bpm 87 → 9 pts (50-55 first step down)', () => {
-    expect(scoreEvent('hr', { bpm: 87 }, 53, 'male')).toBe(9)
+  it('boundary: age 53, bpm 140 → bpm_score 1, drop 20 → total 3', () => {
+    expect(scoreEvent('hr', { bpm: 140, recovery_bpm: 120 }, 53, 'male')).toBe(3)
   })
-  it('boundary: age 60, bpm 85 → 10 pts (56-65 max cutoff)', () => {
-    expect(scoreEvent('hr', { bpm: 85 }, 60, 'male')).toBe(10)
-  })
-  it('boundary: age 60, bpm 86 → 9 pts (56-65 first step down)', () => {
-    expect(scoreEvent('hr', { bpm: 86 }, 60, 'male')).toBe(9)
-  })
-  it('boundary: age 53, bpm 141 → 0 pts (50-55 top cutoff for 0)', () => {
-    expect(scoreEvent('hr', { bpm: 141 }, 53, 'male')).toBe(0)
-  })
-  it('boundary: age 53, bpm 133 → 1 pt (50-55 just below 0-pt threshold)', () => {
-    expect(scoreEvent('hr', { bpm: 133 }, 53, 'male')).toBe(1)
+  it('boundary: age 53, bpm 141 → bpm_score 0, drop 20 → total 2', () => {
+    expect(scoreEvent('hr', { bpm: 141, recovery_bpm: 121 }, 53, 'male')).toBe(2)
   })
 
-  it('throws for age 49 (below 50-55 band)', () => {
-    expect(() => scoreEvent('hr', { bpm: 100 }, 49, 'male')).toThrow(/band/)
+  // 56-65 band
+  it('age 60, bpm 115 → bpm_score 3 (56-65: 113-120=3), drop 20 → total 5', () => {
+    expect(scoreEvent('hr', { bpm: 115, recovery_bpm: 95 }, 60, 'female')).toBe(5)
+  })
+
+  // 66+ band (bpm 95 is ≤96 → 5 pts)
+  it('age 70, bpm 95 → bpm_score 5 (66+: ≤96=5), drop 20 → total 7', () => {
+    expect(scoreEvent('hr', { bpm: 95, recovery_bpm: 75 }, 70, 'male')).toBe(7)
+  })
+
+  // Recovery scoring boundaries (bpm=80 → bpm_score=5 throughout)
+  it('recovery drop 14 → 0 recovery pts → total 5', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 66 }, 53, 'male')).toBe(5)
+  })
+  it('recovery drop 15 → 1 recovery pt → total 6', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 65 }, 53, 'male')).toBe(6)
+  })
+  it('recovery drop 20 → 2 recovery pts → total 7', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 60 }, 53, 'male')).toBe(7)
+  })
+  it('recovery drop 25 → 3 recovery pts → total 8', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 55 }, 53, 'male')).toBe(8)
+  })
+  it('recovery drop 30 → 4 recovery pts → total 9', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 50 }, 53, 'male')).toBe(9)
+  })
+  it('recovery drop 35 → 5 recovery pts → total 10 (max)', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 45 }, 53, 'male')).toBe(10)
+  })
+  it('recovery drop 40 → still 5 recovery pts → total 10 (capped)', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 40 }, 53, 'male')).toBe(10)
+  })
+
+  // Age below 50 clamps to 50-55 band (no longer throws)
+  it('age 49 clamps to 50-55 band: bpm 80, drop 20 → 7 pts', () => {
+    expect(scoreEvent('hr', { bpm: 80, recovery_bpm: 60 }, 49, 'male')).toBe(7)
   })
   it('throws for missing bpm', () => {
-    expect(() => scoreEvent('hr', {}, 55, 'male')).toThrow(/bpm/)
+    expect(() => scoreEvent('hr', { recovery_bpm: 60 }, 55, 'male')).toThrow(/bpm/)
+  })
+  it('throws for missing recovery_bpm', () => {
+    expect(() => scoreEvent('hr', { bpm: 80 }, 55, 'male')).toThrow(/recovery_bpm/)
   })
 })
 
@@ -302,48 +333,68 @@ describe('Balance', () => {
 })
 
 // ---------------------------------------------------------------------------
-// Speed (1-Mile Walk) — age split (50-59, 60-69, 70+)
-// Input: { mph }
+// Speed (1-Mile Walk) — gender + age split, time-based (lower seconds = better)
+// Input: { seconds }  — faster time earns more points; floor = 1 pt for any finisher
+// Male 40-49 thresholds (s→pts): 741=10,774=9,807=8,840=7,861=6,882=5,906=4,930=3,954=2 else 1
+// Male 50-59:  774=10,804=9,834=8,864=7,888=6,912=5,951=4,990=3,1029=2 else 1
+// Male 60-69:  813=10,846=9,879=8,912=7,945=6,978=5,1008=4,1038=3,1068=2 else 1
+// Female 50-59: 855=10,882=9,909=8,936=7,978=6,1020=5,1053=4,1086=3,1119=2 else 1
 // ---------------------------------------------------------------------------
-describe('Speed', () => {
+describe('Speed (1-Mile Walk Test)', () => {
   // Mid-band
-  it('age 55, 3.5 mph → 5 pts (50-59: 3.5→5)', () => {
-    expect(scoreEvent('speed', { mph: 3.5 }, 55, 'male')).toBe(5)
+  it('male age 45, 800s → 8 pts (40-49: ≤807=8)', () => {
+    expect(scoreEvent('speed', { seconds: 800 }, 45, 'male')).toBe(8)
   })
-  it('age 65, 4.0 mph → 7 pts (60-69: 4.0→7)', () => {
-    expect(scoreEvent('speed', { mph: 4.0 }, 65, 'male')).toBe(7)
+  it('male age 55, 900s → 5 pts (50-59: ≤912=5)', () => {
+    expect(scoreEvent('speed', { seconds: 900 }, 55, 'male')).toBe(5)
   })
-  it('age 75, 3.0 mph → 6 pts (70+: 3.0→6)', () => {
-    expect(scoreEvent('speed', { mph: 3.0 }, 75, 'female')).toBe(6)
+  it('male age 65, 950s → 5 pts (60-69: 945 < 950 ≤ 978 → 5)', () => {
+    expect(scoreEvent('speed', { seconds: 950 }, 65, 'male')).toBe(5)
   })
-
-  // Boundaries
-  it('boundary: age 55, 2 mph → 3 pts (first scoring threshold)', () => {
-    expect(scoreEvent('speed', { mph: 2 }, 55, 'male')).toBe(3)
-  })
-  it('boundary: age 55, 1.9 mph → 0 pts (below 2 mph threshold)', () => {
-    expect(scoreEvent('speed', { mph: 1.9 }, 55, 'male')).toBe(0)
-  })
-  it('boundary: age 55, 5.5 mph → 10 pts', () => {
-    expect(scoreEvent('speed', { mph: 5.5 }, 55, 'male')).toBe(10)
-  })
-  it('boundary: age 65, 4.6 mph → 9 pts (60-69)', () => {
-    expect(scoreEvent('speed', { mph: 4.6 }, 65, 'male')).toBe(9)
-  })
-  it('boundary: age 65, 4.59 mph → 8 pts (just below 4.6)', () => {
-    expect(scoreEvent('speed', { mph: 4.59 }, 65, 'male')).toBe(8)
+  it('female age 55, 900s → 8 pts (50-59: 882 < 900 ≤ 909 → 8)', () => {
+    expect(scoreEvent('speed', { seconds: 900 }, 55, 'female')).toBe(8)
   })
 
-  // Unable to complete = 0 (sentinel 'a' = 0; mph=0 also = 0)
-  it('mph 0 → 0 pts (did not walk)', () => {
-    expect(scoreEvent('speed', { mph: 0 }, 55, 'male')).toBe(0)
+  // Boundaries: male 40-49
+  it('boundary: male age 45, 741s → 10 pts (best threshold)', () => {
+    expect(scoreEvent('speed', { seconds: 741 }, 45, 'male')).toBe(10)
+  })
+  it('boundary: male age 45, 742s → 9 pts (just over 741)', () => {
+    expect(scoreEvent('speed', { seconds: 742 }, 45, 'male')).toBe(9)
+  })
+  it('boundary: male age 45, 954s → 2 pts (last threshold)', () => {
+    expect(scoreEvent('speed', { seconds: 954 }, 45, 'male')).toBe(2)
+  })
+  it('boundary: male age 45, 955s → 1 pt (floor — over all thresholds)', () => {
+    expect(scoreEvent('speed', { seconds: 955 }, 45, 'male')).toBe(1)
   })
 
-  it('throws for age 49 (no band)', () => {
-    expect(() => scoreEvent('speed', { mph: 3.5 }, 49, 'male')).toThrow(/band/)
+  // Boundaries: male 50-59
+  it('boundary: male age 55, 774s → 10 pts', () => {
+    expect(scoreEvent('speed', { seconds: 774 }, 55, 'male')).toBe(10)
   })
-  it('throws for missing mph', () => {
-    expect(() => scoreEvent('speed', {}, 55, 'male')).toThrow(/mph/)
+  it('boundary: male age 55, 775s → 9 pts', () => {
+    expect(scoreEvent('speed', { seconds: 775 }, 55, 'male')).toBe(9)
+  })
+
+  // 70-79 band
+  it('male age 75, 900s → 9 pts (70-79: ≤906=9)', () => {
+    expect(scoreEvent('speed', { seconds: 900 }, 75, 'male')).toBe(9)
+  })
+
+  // 80+ band
+  it('male age 82, 1200s → 6 pts (80+: ≤1298=6)', () => {
+    expect(scoreEvent('speed', { seconds: 1200 }, 82, 'male')).toBe(6)
+  })
+  it('male age 82, 1580s → 1 pt (80+: over all thresholds → floor)', () => {
+    expect(scoreEvent('speed', { seconds: 1580 }, 82, 'male')).toBe(1)
+  })
+
+  it('throws for age below 40 (no band defined)', () => {
+    expect(() => scoreEvent('speed', { seconds: 800 }, 39, 'male')).toThrow(/band/)
+  })
+  it('throws for missing seconds', () => {
+    expect(() => scoreEvent('speed', {}, 55, 'male')).toThrow(/seconds/)
   })
 })
 
@@ -467,29 +518,29 @@ describe('scoreEvent — invalid eventKey', () => {
 // ---------------------------------------------------------------------------
 describe('scoreDecathlon', () => {
   const fullInputs = {
-    whr: { ratio: 0.83 },                  // male → 10 pts
-    pushup: { reps: 50 },                   // age 55, → 5 pts
-    squat: { reps: 20 },                    // male, age 55 → 6 pts
-    hr: { bpm: 100 },                       // age 55 → 8 pts
-    situp: { reps: 77 },                    // age 55 → 5 pts
+    whr: { ratio: 0.83 },                              // male → 10 pts
+    pushup: { reps: 50 },                               // age 55 → 5 pts
+    squat: { reps: 20 },                                // male, age 55 → 6 pts
+    hr: { bpm: 100, recovery_bpm: 75 },                 // bpm_score=4 + drop 25 → 3 = 7 pts
+    situp: { reps: 77 },                                // age 55 → 5 pts
     sit_rise: { sitting_supports: 0, rising_supports: 0 }, // → 10 pts
-    balance: { seconds: 30 },               // → 5 pts
-    speed: { mph: 3.5 },                    // age 55 → 5 pts
-    arm_hang: { seconds: 60 },             // male → 5 pts
+    balance: { seconds: 30 },                           // → 5 pts
+    speed: { seconds: 900 },                            // male, age 55 (50-59: ≤912=5) → 5 pts
+    arm_hang: { seconds: 60 },                          // male → 5 pts
     flexibility: {
       hamstring_right: true, hamstring_left: true,
       piriformis_right: true, piriformis_left: true,
       quadriceps_right: true, quadriceps_left: false,
       hip_flexor_right: true, hip_flexor_left: false,
       back_scratch_right: true, back_scratch_left: false,
-    },                                      // 7 pts
+    },                                                  // 7 pts
   }
 
   it('returns correct breakdown and total', () => {
     const result = scoreDecathlon(fullInputs, 55, 'male')
     expect(result.breakdown).toHaveLength(10)
-    // Total: 10+5+6+8+5+10+5+5+5+7 = 66
-    expect(result.total).toBe(66)
+    // Total: 10+5+6+7+5+10+5+5+5+7 = 65
+    expect(result.total).toBe(65)
   })
 
   it('breakdown contains all 10 event keys', () => {

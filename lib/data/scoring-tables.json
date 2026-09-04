@@ -245,51 +245,43 @@
   {
     "event_key": "hr",
     "display_name": "Home Step Test (Heart Rate)",
-    "input_unit": "BPM (beats per minute, 15-second count × 4)",
+    "input_unit": "BPM post-exercise + BPM after 2-minute recovery",
     "gender_split": false,
     "age_split": true,
+    "scoring_method": "two_part_hr",
     "bands": {
       "50-55": [
         {"threshold": "a", "points": 0},
-        {"threshold": 0, "points": 0},
-        {"threshold": 40, "points": 10},
-        {"threshold": 86, "points": 10},
-        {"threshold": 87, "points": 9},
-        {"threshold": 98, "points": 8},
-        {"threshold": 106, "points": 7},
-        {"threshold": 117, "points": 5},
-        {"threshold": 123, "points": 3},
+        {"threshold": 0,   "points": 0},
+        {"threshold": 40,  "points": 5},
+        {"threshold": 98,  "points": 4},
+        {"threshold": 117, "points": 3},
+        {"threshold": 123, "points": 2},
         {"threshold": 133, "points": 1},
         {"threshold": 141, "points": 0}
       ],
       "56-65": [
         {"threshold": "a", "points": 0},
-        {"threshold": 0, "points": 0},
-        {"threshold": 40, "points": 10},
-        {"threshold": 85, "points": 10},
-        {"threshold": 86, "points": 9},
-        {"threshold": 98, "points": 8},
-        {"threshold": 104, "points": 7},
-        {"threshold": 113, "points": 5},
-        {"threshold": 121, "points": 3},
+        {"threshold": 0,   "points": 0},
+        {"threshold": 40,  "points": 5},
+        {"threshold": 98,  "points": 4},
+        {"threshold": 113, "points": 3},
+        {"threshold": 121, "points": 2},
         {"threshold": 130, "points": 1},
         {"threshold": 138, "points": 0}
       ],
       "66+": [
         {"threshold": "a", "points": 0},
-        {"threshold": 0, "points": 0},
-        {"threshold": 40, "points": 10},
-        {"threshold": 87, "points": 10},
-        {"threshold": 88, "points": 9},
-        {"threshold": 97, "points": 8},
-        {"threshold": 104, "points": 7},
-        {"threshold": 114, "points": 5},
-        {"threshold": 121, "points": 3},
+        {"threshold": 0,   "points": 0},
+        {"threshold": 40,  "points": 5},
+        {"threshold": 97,  "points": 4},
+        {"threshold": 114, "points": 3},
+        {"threshold": 121, "points": 2},
         {"threshold": 131, "points": 1},
         {"threshold": 137, "points": 0}
       ]
     },
-    "notes": "Lower BPM = better score, but the lookup is still applied as VLOOKUP ascending — points decrease as BPM increases. The age bands for this event differ from all others: 50–55, 56–65, 66+ (not 50–59, 60–69, 70+). Ages 70+ use the 66+ table. 'Unable to complete test' maps to non-numeric input (sentinel 'a') = 0 pts, same as very high BPM. The points scale is non-linear: 0, 1, 3, 5, 7, 8, 9, 10 (no 2, 4, or 6)."
+    "notes": "Score is the sum of two parts (max 10 total). Part 1 — post-exercise BPM (0–5 pts): lower BPM = better, looked up from the age-adjusted table (original 10-tier collapsed to 5). Part 2 — heart rate recovery (0–5 pts): drop = post-exercise BPM minus BPM after 2 minutes of quiet rest. Drop <15=0, 15–19=1, 20–24=2, 25–29=3, 30–34=4, ≥35=5. Age bands: 50–55, 56–65, 66+ (ages below 50 use the 50–55 band)."
   },
   {
     "event_key": "situp",
@@ -382,51 +374,127 @@
   {
     "event_key": "speed",
     "display_name": "1-Mile Walk Test",
-    "input_unit": "MPH (miles per hour, sustained comfortable walking speed)",
-    "gender_split": false,
+    "input_unit": "seconds (elapsed time to complete 1 mile — faster = higher score)",
+    "scoring_method": "time_lookup",
+    "gender_split": true,
     "age_split": true,
     "bands": {
-      "50-59": [
-        {"threshold": "a", "points": 0},
-        {"threshold": 0, "points": 0},
-        {"threshold": 2, "points": 3},
-        {"threshold": 3, "points": 4},
-        {"threshold": 3.5, "points": 5},
-        {"threshold": 4, "points": 6},
-        {"threshold": 4.3, "points": 7},
-        {"threshold": 4.6, "points": 8},
-        {"threshold": 5, "points": 9},
-        {"threshold": 5.5, "points": 10},
-        {"threshold": 6, "points": 10}
-      ],
-      "60-69": [
-        {"threshold": "a", "points": 0},
-        {"threshold": 0, "points": 0},
-        {"threshold": 2, "points": 4},
-        {"threshold": 3, "points": 5},
-        {"threshold": 3.5, "points": 6},
-        {"threshold": 4, "points": 7},
-        {"threshold": 4.3, "points": 8},
-        {"threshold": 4.6, "points": 9},
-        {"threshold": 5, "points": 10},
-        {"threshold": 5.5, "points": 10},
-        {"threshold": 6, "points": 10}
-      ],
-      "70+": [
-        {"threshold": "a", "points": 0},
-        {"threshold": 0, "points": 0},
-        {"threshold": 2, "points": 5},
-        {"threshold": 3, "points": 6},
-        {"threshold": 3.5, "points": 7},
-        {"threshold": 4, "points": 8},
-        {"threshold": 4.3, "points": 9},
-        {"threshold": 4.6, "points": 10},
-        {"threshold": 5, "points": 10},
-        {"threshold": 5.5, "points": 10},
-        {"threshold": 6, "points": 10}
-      ]
+      "male": {
+        "40-49": [
+          {"threshold": 741,  "points": 10},
+          {"threshold": 774,  "points": 9},
+          {"threshold": 807,  "points": 8},
+          {"threshold": 840,  "points": 7},
+          {"threshold": 861,  "points": 6},
+          {"threshold": 882,  "points": 5},
+          {"threshold": 906,  "points": 4},
+          {"threshold": 930,  "points": 3},
+          {"threshold": 954,  "points": 2}
+        ],
+        "50-59": [
+          {"threshold": 774,  "points": 10},
+          {"threshold": 804,  "points": 9},
+          {"threshold": 834,  "points": 8},
+          {"threshold": 864,  "points": 7},
+          {"threshold": 888,  "points": 6},
+          {"threshold": 912,  "points": 5},
+          {"threshold": 951,  "points": 4},
+          {"threshold": 990,  "points": 3},
+          {"threshold": 1029, "points": 2}
+        ],
+        "60-69": [
+          {"threshold": 813,  "points": 10},
+          {"threshold": 846,  "points": 9},
+          {"threshold": 879,  "points": 8},
+          {"threshold": 912,  "points": 7},
+          {"threshold": 945,  "points": 6},
+          {"threshold": 978,  "points": 5},
+          {"threshold": 1008, "points": 4},
+          {"threshold": 1038, "points": 3},
+          {"threshold": 1068, "points": 2}
+        ],
+        "70-79": [
+          {"threshold": 885,  "points": 10},
+          {"threshold": 906,  "points": 9},
+          {"threshold": 927,  "points": 8},
+          {"threshold": 948,  "points": 7},
+          {"threshold": 1038, "points": 6},
+          {"threshold": 1128, "points": 5},
+          {"threshold": 1173, "points": 4},
+          {"threshold": 1218, "points": 3},
+          {"threshold": 1263, "points": 2}
+        ],
+        "80+": [
+          {"threshold": 1106, "points": 10},
+          {"threshold": 1132, "points": 9},
+          {"threshold": 1159, "points": 8},
+          {"threshold": 1185, "points": 7},
+          {"threshold": 1298, "points": 6},
+          {"threshold": 1410, "points": 5},
+          {"threshold": 1466, "points": 4},
+          {"threshold": 1522, "points": 3},
+          {"threshold": 1579, "points": 2}
+        ]
+      },
+      "female": {
+        "40-49": [
+          {"threshold": 825,  "points": 10},
+          {"threshold": 852,  "points": 9},
+          {"threshold": 879,  "points": 8},
+          {"threshold": 906,  "points": 7},
+          {"threshold": 936,  "points": 6},
+          {"threshold": 966,  "points": 5},
+          {"threshold": 1008, "points": 4},
+          {"threshold": 1050, "points": 3},
+          {"threshold": 1092, "points": 2}
+        ],
+        "50-59": [
+          {"threshold": 855,  "points": 10},
+          {"threshold": 882,  "points": 9},
+          {"threshold": 909,  "points": 8},
+          {"threshold": 936,  "points": 7},
+          {"threshold": 978,  "points": 6},
+          {"threshold": 1020, "points": 5},
+          {"threshold": 1053, "points": 4},
+          {"threshold": 1086, "points": 3},
+          {"threshold": 1119, "points": 2}
+        ],
+        "60-69": [
+          {"threshold": 870,  "points": 10},
+          {"threshold": 906,  "points": 9},
+          {"threshold": 942,  "points": 8},
+          {"threshold": 978,  "points": 7},
+          {"threshold": 1014, "points": 6},
+          {"threshold": 1050, "points": 5},
+          {"threshold": 1101, "points": 4},
+          {"threshold": 1152, "points": 3},
+          {"threshold": 1203, "points": 2}
+        ],
+        "70-79": [
+          {"threshold": 1047, "points": 10},
+          {"threshold": 1098, "points": 9},
+          {"threshold": 1149, "points": 8},
+          {"threshold": 1200, "points": 7},
+          {"threshold": 1254, "points": 6},
+          {"threshold": 1308, "points": 5},
+          {"threshold": 1377, "points": 4},
+          {"threshold": 1446, "points": 3},
+          {"threshold": 1515, "points": 2}
+        ],
+        "80+": [
+          {"threshold": 1256, "points": 10},
+          {"threshold": 1318, "points": 9},
+          {"threshold": 1379, "points": 8},
+          {"threshold": 1440, "points": 7},
+          {"threshold": 1505, "points": 6},
+          {"threshold": 1570, "points": 5},
+          {"threshold": 1652, "points": 4},
+          {"threshold": 1735, "points": 3},
+          {"threshold": 1818, "points": 2}
+        ]
+      }
     },
-    "notes": "Unable to complete the 1-mile walk = 0 pts (sentinel 'a' = 0, consistent with instructions and display table). Any speed between 0 and 2 MPH (exclusive) also returns 0 pts via the threshold 0 → 0 row."
+    "notes": "Faster time = higher score. Thresholds are maximum seconds allowed to earn that point value. Anyone who completes the mile earns at least 1 point. Ages below 40 use the 40-49 band. Source: published age-adjusted 1-mile walk norms (Excellent/Good/Average/Fair/Poor) converted to a 10-point scale. 80+ standards are Rebel Decathlon standards adjusted from 70+ norms using documented walking-speed decline."
   },
   {
     "event_key": "arm_hang",

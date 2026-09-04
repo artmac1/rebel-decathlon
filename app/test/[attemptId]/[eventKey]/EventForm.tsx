@@ -74,12 +74,27 @@ function RepsFields() {
 
 function HrFields() {
   return (
-    <NumberField
-      name="bpm"
-      label="Heart rate (beats per minute — 15-second count × 4)"
-      min={20}
-      max={250}
-    />
+    <div className="space-y-4">
+      <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+        <p className="text-sm font-semibold text-gray-700">Immediately after stepping</p>
+        <NumberField
+          name="bpm"
+          label="Heart rate (beats per minute — 15-second count × 4)"
+          min={20}
+          max={250}
+        />
+      </div>
+      <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+        <p className="text-sm font-semibold text-gray-700">After 2 minutes of quiet rest</p>
+        <p className="text-xs text-gray-500">Sit or stand quietly for exactly 2 minutes, then measure heart rate again.</p>
+        <NumberField
+          name="recovery_bpm"
+          label="Recovery heart rate (beats per minute — 15-second count × 4)"
+          min={20}
+          max={250}
+        />
+      </div>
+    </div>
   )
 }
 
@@ -89,7 +104,39 @@ function SecondsFields({ label }: { label: string }) {
 
 function SpeedFields() {
   return (
-    <NumberField name="mph" label="Walking speed (mph)" min={0} max={10} step={0.1} />
+    <div className="space-y-3">
+      <p className="text-sm text-gray-500">Enter the time it took you to complete the 1-mile walk.</p>
+      <div className="flex gap-3">
+        <div className="flex-1">
+          <label htmlFor="walk_minutes" className="block text-sm font-medium text-gray-700 mb-1">
+            Minutes
+          </label>
+          <input
+            id="walk_minutes"
+            name="walk_minutes"
+            type="number"
+            min={0}
+            max={59}
+            required
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex-1">
+          <label htmlFor="walk_seconds" className="block text-sm font-medium text-gray-700 mb-1">
+            Seconds
+          </label>
+          <input
+            id="walk_seconds"
+            name="walk_seconds"
+            type="number"
+            min={0}
+            max={59}
+            required
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -168,13 +215,19 @@ function buildRawInput(eventKey: string, form: HTMLFormElement): Record<string, 
     case 'situp':
       return { reps: parseInt(get('reps')!.value, 10) }
     case 'hr':
-      return { bpm: parseInt(get('bpm')!.value, 10) }
+      return {
+        bpm: parseInt(get('bpm')!.value, 10),
+        recovery_bpm: parseInt(get('recovery_bpm')!.value, 10),
+      }
     case 'balance':
       return { seconds: parseFloat(get('seconds')!.value) }
     case 'arm_hang':
       return { seconds: parseFloat(get('seconds')!.value) }
-    case 'speed':
-      return { mph: parseFloat(get('mph')!.value) }
+    case 'speed': {
+      const mins = parseInt(get('walk_minutes')!.value, 10) || 0
+      const secs = parseInt(get('walk_seconds')!.value, 10) || 0
+      return { seconds: mins * 60 + secs }
+    }
     case 'sit_rise': {
       const sittingUnable = (get('sitting_unable') as HTMLInputElement)?.checked ?? false
       const risingUnable = (get('rising_unable') as HTMLInputElement)?.checked ?? false

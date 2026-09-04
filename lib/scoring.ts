@@ -105,6 +105,19 @@ function vlookup(breakpoints: Breakpoint[], value: number): number {
 }
 
 /**
+ * Time-based lookup: breakpoints are ordered from best (lowest time threshold)
+ * to worst (highest time threshold). Returns the points for the first row where
+ * value <= threshold. Anyone who completes the test earns at least 1 point.
+ */
+function vlookupTime(breakpoints: Breakpoint[], seconds: number): number {
+  for (const bp of breakpoints) {
+    if (typeof bp.threshold !== 'number') continue
+    if (seconds <= bp.threshold) return bp.points
+  }
+  return 1
+}
+
+/**
  * Find the age-band key whose range contains the given age.
  * Supports patterns like "50-59", "60-64", "70+", "90+".
  */
@@ -177,9 +190,8 @@ function extractValue(eventKey: string, rawInput: RawInput): number {
       return requireNumber(rawInput, 'bpm', eventKey)
     case 'balance':
     case 'arm_hang':
-      return requireNumber(rawInput, 'seconds', eventKey)
     case 'speed':
-      return requireNumber(rawInput, 'mph', eventKey)
+      return requireNumber(rawInput, 'seconds', eventKey)
     default:
       throw new Error(`No value extractor defined for event "${eventKey}"`)
   }
@@ -216,6 +228,46 @@ const FLEXIBILITY_FIELDS = [
   'back_scratch_right', 'back_scratch_left',
 ] as const
 
+function scoreHr(event: AgeSplitEvent, rawInput: RawInput, age: number): number {
+  // Clamp ages below the lowest band to 50-55
+  const clampedAge = age < 50 ? 50 : age
+  const band = resolveAgeBand(event.bands, clampedAge, 'hr')
+  const breakpoints = event.bands[band]
+
+  const bpm = requireNumber(rawInput, 'bpm', 'hr')
+  const recoveryBpm = requireNumber(rawInput, 'recovery_bpm', 'hr')
+
+  // Part 1: post-exercise BPM (0–5 pts, lower BPM = better)
+  const bpmScore = vlookup(breakpoints, bpm)
+
+  // Part 2: heart rate recovery after 2 minutes (0–5 pts)
+  const drop = bpm - recoveryBpm
+  let recoveryScore: number
+  if (drop >= 35)      recoveryScore = 5
+  else if (drop >= 30) recoveryScore = 4
+  else if (drop >= 25) recoveryScore = 3
+  else if (drop >= 20) recoveryScore = 2
+  else if (drop >= 15) recoveryScore = 1
+  else                 recoveryScore = 0
+
+  return bpmScore + recoveryScore
+}
+
+function scoreTimeLookup(
+  event: GenderAgeSplitEvent,
+  rawInput: RawInput,
+  age: number,
+  gender: 'male' | 'female',
+): number {
+  const genderBands = event.bands[gender]
+  if (!genderBands) throw new Error(`Event "speed": no bands for gender "${gender}"`)
+  // Clamp to the youngest defined bracket if age is below it
+  const band = resolveAgeBand(genderBands, age, event.event_key)
+  const breakpoints = genderBands[band]
+  const seconds = requireNumber(rawInput, 'seconds', event.event_key)
+  return vlookupTime(breakpoints, seconds)
+}
+
 function scoreFlexibility(rawInput: RawInput): number {
   let total = 0
   for (const field of FLEXIBILITY_FIELDS) {
@@ -250,6 +302,8 @@ export function scoreEvent(
   // Special scoring methods
   if (event.event_key === 'sit_rise') return scoreSitRise(rawInput)
   if (event.event_key === 'flexibility') return scoreFlexibility(rawInput)
+  if (event.event_key === 'speed') return scoreTimeLookup(event as GenderAgeSplitEvent, rawInput, age, gender)
+  if (event.event_key === 'hr') return scoreHr(event as AgeSplitEvent, rawInput, age)
 
   // Resolve breakpoints based on split type
   let breakpoints: Breakpoint[]
