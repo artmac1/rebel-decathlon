@@ -3,6 +3,7 @@ import { createServiceClient } from '@/lib/supabase'
 import { ALL_EVENT_KEYS, EVENT_INSTRUCTIONS } from '@/lib/event-instructions'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import SavedBanner from './SavedBanner'
 import ResumeLink from './ResumeLink'
 
@@ -42,6 +43,10 @@ export default async function AttemptDashboard({
         <Suspense fallback={null}>
           <SavedBanner />
         </Suspense>
+
+        <div className="flex justify-end mb-4">
+          <Image src="/saa-icon.png" alt="Successful Aging Academy" width={48} height={48} />
+        </div>
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">{participantName}&apos;s Assessment</h1>

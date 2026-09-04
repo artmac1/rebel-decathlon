@@ -1,10 +1,11 @@
 import { createServiceClient } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 
 // Art: replace 'TODO' with your Vimeo intro video ID after uploading
 // e.g. if your Vimeo URL is https://vimeo.com/123456789, set this to '123456789'
-const INTRO_VIMEO_ID = 'TODO'
+const INTRO_VIMEO_ID = '1221897484'
 
 export default async function WelcomePage({
   params,
@@ -23,8 +24,11 @@ export default async function WelcomePage({
   if (!attempt) notFound()
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
-      <div className="w-full max-w-lg">
+    <main className="min-h-screen bg-gray-50 px-4 py-10">
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="flex justify-center mb-6">
+          <Image src="/saa-logo.png" alt="Successful Aging Academy" width={300} height={120} priority />
+        </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
           Welcome to the Rebel Decathlon
         </h1>
@@ -32,17 +36,15 @@ export default async function WelcomePage({
           Watch this short intro before you begin.
         </p>
 
-        {INTRO_VIMEO_ID !== 'TODO' && (
-          <div className="aspect-video rounded-2xl overflow-hidden mb-6 bg-black">
-            <iframe
-              src={`https://player.vimeo.com/video/${INTRO_VIMEO_ID}`}
-              title="Rebel Decathlon introduction"
-              className="w-full h-full"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        )}
+        <div className="aspect-video rounded-2xl overflow-hidden mb-6 bg-black">
+          <iframe
+            src={`https://player.vimeo.com/video/${INTRO_VIMEO_ID}`}
+            title="Rebel Decathlon introduction"
+            className="w-full h-full"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
 
         <Link
           href={`/test/${attemptId}`}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function StartPage() {
   const router = useRouter()
@@ -48,6 +49,9 @@ export default function StartPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div className="flex justify-center mb-6">
+          <Image src="/saa-logo.png" alt="Successful Aging Academy" width={280} height={112} priority />
+        </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-1">Rebel Decathlon</h1>
         <p className="text-gray-500 mb-6 text-sm">
           Enter your details to begin your 10-event fitness assessment.
