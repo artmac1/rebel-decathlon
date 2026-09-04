@@ -2,6 +2,7 @@ import { createServiceClient } from '@/lib/supabase'
 import { ALL_EVENT_KEYS, EVENT_INSTRUCTIONS } from '@/lib/event-instructions'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import EventForm from './EventForm'
 
 export default async function EventPage({
@@ -30,12 +31,15 @@ export default async function EventPage({
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="max-w-lg mx-auto">
-        <Link
-          href={`/test/${attemptId}`}
-          className="text-sm text-gray-500 hover:text-gray-700 mb-6 inline-block"
-        >
-          ← Back to dashboard
-        </Link>
+        <div className="flex items-center justify-between mb-6">
+          <Link
+            href={`/test/${attemptId}`}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            ← Back to dashboard
+          </Link>
+          <Image src="/saa-icon.png" alt="Successful Aging Academy" width={40} height={40} />
+        </div>
 
         <div className="mb-6">
           <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">
@@ -43,6 +47,22 @@ export default async function EventPage({
           </p>
           <h1 className="text-2xl font-bold text-gray-900">{instruction.displayName}</h1>
         </div>
+
+        {instruction.warnings && instruction.warnings.length > 0 && (
+          <div className="mb-6 bg-red-50 border border-red-300 rounded-2xl p-5">
+            <p className="text-sm font-bold text-red-700 uppercase tracking-wide mb-3">
+              ⚠ Safety Warning — Read Before Proceeding
+            </p>
+            <ul className="space-y-2">
+              {instruction.warnings.map((warning, i) => (
+                <li key={i} className="text-sm text-red-800 flex gap-2">
+                  <span className="shrink-0 font-bold">•</span>
+                  <span>{warning}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {instruction.vimeoId && instruction.vimeoId !== 'TODO' && (
           <div className="mb-6 aspect-video rounded-2xl overflow-hidden bg-black">

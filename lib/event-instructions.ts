@@ -6,12 +6,13 @@ export type EventInstruction = {
   instructions: string[]
   note?: string
   vimeoId?: string
+  warnings?: string[]
 }
 
 export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
   whr: {
     displayName: 'Waist-to-Hip Ratio',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533940',
     instructions: [
       'Using a non-stretching, cloth tape measure, determine a waist and hip circumference as described below. Divide the waist measurement by the hip measurement to calculate the ratio.',
       'The waist is most conveniently measured at the smallest circumference of the natural waist, usually just above the belly button.',
@@ -23,7 +24,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   pushup: {
     displayName: 'Push-Up Challenge (4 minutes)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533979',
     instructions: [
       'Execute as many repetitions as possible in a 4-minute time period. Rests are allowed, but the clock does NOT stop.',
       'Place a pad or soft object underneath the torso, not more than 3 inches high. A repetition is NOT counted unless the torso touches the pad.',
@@ -35,7 +36,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   squat: {
     displayName: 'Chair Squat Test (30 seconds)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533939',
     instructions: [
       'Stand with feet approximately shoulder-width apart, with the back of the legs in contact with a standard-height chair (roughly 17 inches high).',
       'Fold your arms across the chest. Sit in the chair and immediately return to a standing position as quickly as possible.',
@@ -47,19 +48,26 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   hr: {
     displayName: 'Home Step Test (Heart Rate)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
-    instructions: [
-      'Step up and down, one foot at a time, onto a 12″ step or bench for 3 minutes. (Individuals over age 70 should use an 8″ step; if over 80 the test can be limited to 2:30.)',
-      'Maintain a steady four-beat cycle — approximately 22 to 24 steps per minute. Use a metronome app to keep the pace.',
-      'On finishing the test, immediately count the number of heartbeats for 15 seconds using the carotid pulse or a heart rate monitor.',
-      'Multiply that 15-second count by 4 to get beats per minute, then use the age-appropriate table to find your score.',
+    vimeoId: '1219533978',
+    warnings: [
+      'This test must only be performed by individuals who have been cleared for exercise by their physician and who are currently active and free of cardiovascular disease or known cardiovascular risk factors.',
+      'This test must NEVER be performed without an experienced spotter or trainer present.',
+      'STOP THE TEST IMMEDIATELY if the subject feels unwell, nauseous, dizzy, or lightheaded at any point — before, during, or after stepping.',
+      'Individuals over age 80 are strongly discouraged from performing this test. Consult your physician before proceeding.',
     ],
-    note: 'IMPORTANT: This test should only be given to individuals cleared for exercise. Terminate immediately if dizziness or light-headedness occurs.',
+    instructions: [
+      'Step up and down, one foot at a time, onto a 12″ step or bench for 3 minutes. (Individuals over age 70 should use an 8″ step.)',
+      'Maintain a steady four-beat cycle — approximately 22 to 24 steps per minute. Use a metronome app to keep the pace.',
+      'Immediately on finishing, count heartbeats for 15 seconds using the carotid pulse or a heart rate monitor. Multiply by 4 to get BPM. Record this as your post-exercise heart rate.',
+      'Rest quietly for exactly 2 full minutes — seated or standing still. At the 2-minute mark, count heartbeats for 15 seconds again and multiply by 4. Record this as your recovery heart rate.',
+      'Your score combines both readings: the post-exercise rate reflects aerobic fitness; the 2-minute drop reflects how efficiently your heart recovers.',
+    ],
+    note: 'All participants must be cleared for exercise by their doctor before taking this test.',
   },
 
   situp: {
     displayName: 'Sit-Up Challenge (3 minutes)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533996',
     instructions: [
       'Lie on your back on a firm but padded surface. Bend your elbows so your arms rest on your torso with fists underneath the chin — this is the start and end position.',
       'When the clock starts, bend your knees and raise your torso to form a "V" shape. Grab your shins, then return to the supine position. That is one repetition.',
@@ -71,7 +79,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   sit_rise: {
     displayName: 'Sitting-Rising Test (SRT)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533992',
     instructions: [
       'Begin standing on a comfortable mat or padded surface. Without using any support, lower yourself to a seated position on the floor with legs extended in front of you.',
       'When ready, return to a standing position.',
@@ -84,7 +92,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   balance: {
     displayName: 'Stork Test (Balance)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533938',
     instructions: [
       'Remove your shoes. Choose which leg to stand on — typically the dominant side produces a better score, but try both if needed.',
       'Place your hands on your hips. Raise the non-standing foot and rest it against the inside of the standing knee.',
@@ -96,19 +104,19 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   speed: {
     displayName: '1-Mile Walk Test',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533998',
     instructions: [
-      'The goal is to establish a sustainable walking speed the individual can comfortably maintain day-to-day.',
-      'This test is ideally performed on a treadmill so all variables can be controlled.',
-      'Walk 1 mile at a steady, comfortable pace. Record the speed in miles per hour (mph).',
-      'If the individual cannot complete the 1-mile walk at any pace, record a score of 0.',
+      'Walk exactly 1 mile as fast as you can without breaking into a run. Use a treadmill, a measured track, or a mapped route.',
+      'Start a stopwatch when you begin and stop it the moment you complete the mile. Record your elapsed time in minutes and seconds.',
+      'Maintain the fastest pace you can sustain for the full distance — this is a performance test, not a comfortable stroll.',
+      'If you cannot complete the mile at any pace, do not enter a time — your score will be recorded as 0.',
     ],
-    note: 'Studies show that people who walk faster tend to live longer. Terminate the test immediately if the subject feels dizzy or lightheaded.',
+    note: 'Your score is based on your elapsed time adjusted for age and gender. Faster = more points. Terminate the test immediately if you feel dizzy or lightheaded.',
   },
 
   arm_hang: {
     displayName: 'Dead Hang / Arm Hang (Grip Test)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533937',
     instructions: [
       'Grip an overhead bar with both hands, palms facing away (overhand grip), arms fully extended.',
       'Lift your feet off the ground and hold the position for as long as possible.',
@@ -120,7 +128,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
 
   flexibility: {
     displayName: 'General Flexibility (5 Bilateral Tests)',
-    vimeoId: 'TODO', // Art: replace with Vimeo video ID after uploading
+    vimeoId: '1219533964',
     instructions: [
       'Lie on a comfortable padded surface. A partner/trainer assists with each movement. Never force range of motion — movements should be uncomfortable but NOT painful.',
       '1. Sagittal Hamstring — Lying on your back, raise one leg straight up to 90°. Repeat the other side. Each side that cannot reach 90° loses 1 point.',
