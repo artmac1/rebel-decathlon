@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 // Art: replace 'TODO' with your Vimeo intro video ID after uploading
 // e.g. if your Vimeo URL is https://vimeo.com/123456789, set this to '123456789'
-const INTRO_VIMEO_ID = '1221897484'
+const INTRO_VIMEO_ID = '1224648737'
 
 export default async function WelcomePage({
   params,
