@@ -92,7 +92,7 @@ function HrFields() {
       </div>
       <div className="bg-gray-50 rounded-lg p-4 space-y-3">
         <p className="text-sm font-semibold text-gray-700">After 2 minutes of quiet rest</p>
-        <p className="text-xs text-gray-500">Sit or stand quietly for exactly 2 minutes, then measure heart rate again.</p>
+        <p className="text-xs text-gray-500">Sit quietly for exactly 2 minutes, then measure heart rate again.</p>
         <NumberField
           name="recovery_bpm"
           label="Recovery heart rate (beats per minute — 15-second count × 4)"

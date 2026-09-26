@@ -60,7 +60,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
       'Step up and down, one foot at a time, onto a 12″ step or bench for 3 minutes. (Individuals over age 70 should use an 8″ step.)',
       'Maintain a steady four-beat cycle — approximately 22 to 24 steps per minute. Use a metronome app to keep the pace.',
       'Immediately on finishing, count heartbeats for 15 seconds using the carotid pulse or a heart rate monitor. Multiply by 4 to get BPM. Record this as your post-exercise heart rate.',
-      'Rest quietly for exactly 2 full minutes — seated or standing still. At the 2-minute mark, count heartbeats for 15 seconds again and multiply by 4. Record this as your recovery heart rate.',
+      'Sit quietly for exactly 2 full minutes. At the 2-minute mark, count heartbeats for 15 seconds again and multiply by 4. Record this as your recovery heart rate.',
       'Your score combines both readings: the post-exercise rate reflects aerobic fitness; the 2-minute drop reflects how efficiently your heart recovers.',
     ],
     note: 'All participants must be cleared for exercise by their doctor before taking this test.',
