@@ -48,16 +48,9 @@ export default async function WelcomePage({
 
         <Link
           href={`/test/${attemptId}`}
-          className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-4 py-3 text-sm transition-colors mb-3"
+          className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-4 py-3 text-sm transition-colors"
         >
           Continue to Assessment
-        </Link>
-
-        <Link
-          href={`/test/${attemptId}`}
-          className="block w-full text-center text-sm text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded"
-        >
-          Skip
         </Link>
       </div>
     </main>
