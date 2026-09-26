@@ -27,9 +27,7 @@ export async function POST(
     return Response.json({ error: 'Attempt not found' }, { status: 404 })
   }
 
-  if (attempt.status === 'completed') {
-    return Response.json({ error: 'Attempt is already completed' }, { status: 400 })
-  }
+  const wasAlreadyComplete = attempt.status === 'completed'
 
   // Score the event — throws if eventKey is unknown or rawInput is malformed
   let points: number
@@ -74,17 +72,13 @@ export async function POST(
 
   if (isComplete) {
     const total = doneResults?.reduce((sum, r) => sum + Number(r.points_earned), 0) ?? 0
-    await supabase
-      .from('decathlon_attempts')
-      .update({
-        status: 'completed',
-        completed_at: new Date().toISOString(),
-        total_points: total,
-      })
-      .eq('id', attemptId)
+    const updateData: Record<string, unknown> = { status: 'completed', total_points: total }
+    if (!wasAlreadyComplete) updateData.completed_at = new Date().toISOString()
+    await supabase.from('decathlon_attempts').update(updateData).eq('id', attemptId)
 
+    // Only sync GHL on first completion, not on retakes
     const participant = attempt.participants as unknown as { first_name: string; email: string } | null
-    if (participant?.email) {
+    if (!wasAlreadyComplete && participant?.email) {
       await upsertGhlContact({
         firstName: participant.first_name,
         email: participant.email,

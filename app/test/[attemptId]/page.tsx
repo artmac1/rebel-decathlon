@@ -73,7 +73,15 @@ export default async function AttemptDashboard({
                         {index + 1}. {label}
                       </span>
                     </div>
-                    <span className="text-sm font-semibold text-gray-900">{points} pts</span>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/test/${attemptId}/${key}`}
+                        className="text-xs text-gray-400 hover:text-gray-600"
+                      >
+                        Retake
+                      </Link>
+                      <span className="text-sm font-semibold text-gray-900">{points} pts</span>
+                    </div>
                   </div>
                 ) : (
                   <Link
