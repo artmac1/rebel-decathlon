@@ -56,6 +56,7 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
       'Individuals over age 80 are strongly discouraged from performing this test. Consult your physician before proceeding.',
     ],
     instructions: [
+      'This test is 3 minutes long. Set a timer before you begin.',
       'Step up and down, one foot at a time, onto a 12″ step or bench for 3 minutes. (Individuals over age 70 should use an 8″ step.)',
       'Maintain a steady four-beat cycle — approximately 22 to 24 steps per minute. Use a metronome app to keep the pace.',
       'Immediately on finishing, count heartbeats for 15 seconds using the carotid pulse or a heart rate monitor. Multiply by 4 to get BPM. Record this as your post-exercise heart rate.',
