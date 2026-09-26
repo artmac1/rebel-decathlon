@@ -118,6 +118,35 @@ function deltaColor(delta: number): string {
   return 'text-gray-400'
 }
 
+// ─── HR breakdown helpers ─────────────────────────────────────────────────────
+
+function hrRecoveryScore(drop: number): number {
+  if (drop >= 35) return 5
+  if (drop >= 30) return 4
+  if (drop >= 25) return 3
+  if (drop >= 20) return 2
+  if (drop >= 15) return 1
+  return 0
+}
+
+function hrRecoveryLabel(drop: number): string {
+  if (drop >= 35) return 'Excellent (35+ beat drop)'
+  if (drop >= 30) return 'Very good (30+ beat drop)'
+  if (drop >= 25) return 'Good (25+ beat drop)'
+  if (drop >= 20) return 'Fair (20+ beat drop)'
+  if (drop >= 15) return 'Poor (15+ beat drop)'
+  return 'Very poor (under 15 beat drop)'
+}
+
+function hrBpmLabel(pts: number): string {
+  if (pts >= 5) return 'Excellent'
+  if (pts >= 4) return 'Very good'
+  if (pts >= 3) return 'Good'
+  if (pts >= 2) return 'Fair'
+  if (pts >= 1) return 'Poor'
+  return 'Very poor'
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function ResultsPage({
@@ -140,11 +169,15 @@ export default async function ResultsPage({
   // Current event results
   const { data: eventResults } = await supabase
     .from('event_results')
-    .select('event_key, points_earned')
+    .select('event_key, points_earned, raw_input')
     .eq('attempt_id', attemptId)
 
   const resultsByKey = Object.fromEntries(
     (eventResults ?? []).map((r) => [r.event_key, Number(r.points_earned)])
+  )
+
+  const rawByKey = Object.fromEntries(
+    (eventResults ?? []).map((r) => [r.event_key, r.raw_input as Record<string, number> | null])
   )
 
   // Most recent prior completed attempt for this participant
@@ -350,18 +383,55 @@ export default async function ResultsPage({
               const prior = priorAttempt ? priorByKey[key] : undefined
               const delta = prior !== undefined && hasResult ? points - prior : null
 
+              // HR breakdown
+              const raw = rawByKey[key]
+              const showHrBreakdown = key === 'hr' && hasResult && raw && typeof raw.bpm === 'number' && typeof raw.recovery_bpm === 'number'
+              const hrDrop = showHrBreakdown ? (raw.bpm - raw.recovery_bpm) : 0
+              const hrRecovPts = showHrBreakdown ? hrRecoveryScore(hrDrop) : 0
+              const hrBpmPts = showHrBreakdown ? points - hrRecovPts : 0
+
               return (
-                <li key={key} className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400 w-4 shrink-0 tabular-nums">{index + 1}</span>
-                  <span className="text-sm text-gray-700 flex-1 min-w-0 leading-tight">{label}</span>
-                  {delta !== null && (
-                    <span className={`text-xs font-medium w-7 text-right tabular-nums shrink-0 ${deltaColor(delta)}`}>
-                      {fmtDelta(delta)}
+                <li key={key} className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-400 w-4 shrink-0 tabular-nums">{index + 1}</span>
+                    <span className="text-sm text-gray-700 flex-1 min-w-0 leading-tight">{label}</span>
+                    {delta !== null && (
+                      <span className={`text-xs font-medium w-7 text-right tabular-nums shrink-0 ${deltaColor(delta)}`}>
+                        {fmtDelta(delta)}
+                      </span>
+                    )}
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 tabular-nums ${hasResult ? scoreBadge(points) : 'text-gray-300'}`}>
+                      {hasResult ? `${points} / 10` : '—'}
                     </span>
+                  </div>
+                  {showHrBreakdown && (
+                    <div className="ml-6 bg-gray-50 rounded-lg px-3 py-2.5 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs text-gray-600">Post-exercise BPM: </span>
+                          <span className="text-xs font-semibold text-gray-800">{raw.bpm} bpm</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-gray-400">{hrBpmLabel(hrBpmPts)}</span>
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full tabular-nums ${scoreBadge(hrBpmPts * 2)}`}>
+                            {hrBpmPts} / 5
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs text-gray-600">Recovery drop: </span>
+                          <span className="text-xs font-semibold text-gray-800">{hrDrop} beats</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-gray-400">{hrRecoveryLabel(hrDrop)}</span>
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full tabular-nums ${scoreBadge(hrRecovPts * 2)}`}>
+                            {hrRecovPts} / 5
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 tabular-nums ${hasResult ? scoreBadge(points) : 'text-gray-300'}`}>
-                    {hasResult ? `${points} / 10` : '—'}
-                  </span>
                 </li>
               )
             })}
