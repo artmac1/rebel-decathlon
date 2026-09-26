@@ -29,7 +29,7 @@ export default async function EventPage({
   const eventIndex = ALL_EVENT_KEYS.indexOf(eventKey as typeof ALL_EVENT_KEYS[number])
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-10">
+    <main className="min-h-screen bg-gray-50 px-4 py-6 sm:py-10">
       <div className="max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-6">
           <Link

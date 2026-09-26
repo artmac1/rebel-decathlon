@@ -1,6 +1,7 @@
 import { createAuthServerClient } from '@/lib/supabase-server'
 import { createServiceClient } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from 'next/image'
 import EmailForm from './EmailForm'
 import SignOut from './SignOut'
 
@@ -34,6 +35,9 @@ export default async function ProgressPage() {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="w-full max-w-sm space-y-5">
+          <div className="flex justify-center">
+            <Image src="/saa-icon.png" alt="Successful Aging Academy" width={48} height={48} />
+          </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Your progress</h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -77,6 +81,7 @@ export default async function ProgressPage() {
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
+            <Image src="/saa-icon.png" alt="Successful Aging Academy" width={40} height={40} className="mb-3" />
             <h1 className="text-2xl font-bold text-gray-900">
               {participant ? `${participant.first_name}'s progress` : 'Your progress'}
             </h1>

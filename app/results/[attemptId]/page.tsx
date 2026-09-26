@@ -397,12 +397,15 @@ export default async function ResultsPage({
             and put a structured plan in place. That&apos;s exactly what we do together.
           </p>
           <div className="flex gap-3">
-            <PrintButton />
+            {/* Print makes no sense on a phone — hide it on small screens */}
+            <div className="hidden sm:block">
+              <PrintButton />
+            </div>
             <Link
               href={bookingUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white text-center hover:bg-gray-700 transition-colors"
+              className="flex-1 rounded-xl bg-gray-900 px-4 py-4 text-base font-medium text-white text-center hover:bg-gray-700 transition-colors"
             >
               Book a session →
             </Link>

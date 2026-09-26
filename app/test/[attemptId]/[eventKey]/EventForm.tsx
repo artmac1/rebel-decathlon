@@ -27,6 +27,10 @@ function NumberField({
   step?: number
   required?: boolean
 }) {
+  // Use "decimal" for fields that allow fractions (step < 1), "numeric" for whole numbers.
+  // This ensures iOS shows the number pad instead of the full keyboard.
+  const inputMode = step && step < 1 ? 'decimal' : 'numeric'
+
   return (
     <div>
       <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
@@ -36,20 +40,22 @@ function NumberField({
         id={name}
         name={name}
         type="number"
+        inputMode={inputMode}
         min={min}
         max={max}
         step={step}
         required={required}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     </div>
   )
 }
 
 function CheckboxField({ name, label }: { name: string; label: string }) {
+  // Larger touch target — wraps the whole row so the label area is also tappable.
   return (
-    <label className="flex items-center gap-3 cursor-pointer">
-      <input type="checkbox" name={name} className="h-4 w-4 rounded border-gray-300 text-blue-600" />
+    <label className="flex items-center gap-3 cursor-pointer py-1.5">
+      <input type="checkbox" name={name} className="h-5 w-5 rounded border-gray-300 text-blue-600 shrink-0" />
       <span className="text-sm text-gray-700">{label}</span>
     </label>
   )
@@ -115,10 +121,11 @@ function SpeedFields() {
             id="walk_minutes"
             name="walk_minutes"
             type="number"
+            inputMode="numeric"
             min={0}
             max={59}
             required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="flex-1">
@@ -129,10 +136,11 @@ function SpeedFields() {
             id="walk_seconds"
             name="walk_seconds"
             type="number"
+            inputMode="numeric"
             min={0}
             max={59}
             required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
@@ -330,7 +338,7 @@ export default function EventForm({ attemptId, eventKey }: Props) {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition-colors"
+        className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-4 text-base transition-colors"
       >
         {submitting ? 'Saving…' : 'Submit Result'}
       </button>

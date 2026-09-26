@@ -38,7 +38,7 @@ export default async function AttemptDashboard({
   const isComplete = attempt.status === 'completed'
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-10">
+    <main className="min-h-screen bg-gray-50 px-4 py-6 sm:py-10">
       <div className="max-w-lg mx-auto">
         <Suspense fallback={null}>
           <SavedBanner />
@@ -66,7 +66,7 @@ export default async function AttemptDashboard({
             return (
               <li key={key}>
                 {done ? (
-                  <div className="flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-3">
+                  <div className="flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-4">
                     <div className="flex items-center gap-3">
                       <span className="text-green-500 text-lg">✓</span>
                       <span className="text-sm font-medium text-gray-700">
@@ -78,7 +78,7 @@ export default async function AttemptDashboard({
                 ) : (
                   <Link
                     href={`/test/${attemptId}/${key}`}
-                    className="flex items-center justify-between bg-white border border-gray-200 hover:border-blue-400 hover:bg-blue-50 rounded-xl px-4 py-3 transition-colors"
+                    className="flex items-center justify-between bg-white border border-gray-200 hover:border-blue-400 hover:bg-blue-50 rounded-xl px-4 py-4 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-gray-300 text-lg">○</span>

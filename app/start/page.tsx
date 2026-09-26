@@ -68,7 +68,7 @@ export default function StartPage() {
               type="text"
               required
               autoComplete="given-name"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -82,7 +82,7 @@ export default function StartPage() {
               type="email"
               required
               autoComplete="email"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -94,10 +94,11 @@ export default function StartPage() {
               id="age"
               name="age"
               type="number"
+              inputMode="numeric"
               required
               min={18}
               max={120}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -110,7 +111,7 @@ export default function StartPage() {
               name="gender"
               required
               defaultValue=""
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="" disabled>Select…</option>
               <option value="male">Male</option>
@@ -125,7 +126,7 @@ export default function StartPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-4 text-base transition-colors"
           >
             {submitting ? 'Starting…' : 'Start Assessment'}
           </button>
