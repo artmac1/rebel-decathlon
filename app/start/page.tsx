@@ -23,7 +23,7 @@ export default function StartPage() {
     }
 
     let response: Response
-    let result: { error?: string; attemptId?: string }
+    let result: { error?: string; attemptId?: string; requiresPayment?: boolean; participantId?: string }
     try {
       response = await fetch('/api/participants', {
         method: 'POST',
@@ -34,6 +34,12 @@ export default function StartPage() {
     } catch (err) {
       setError(`Network or server error: ${err}`)
       setSubmitting(false)
+      return
+    }
+
+    // Returning user who hasn't paid — redirect to upgrade page
+    if (response.status === 402 && result.requiresPayment) {
+      router.push(`/upgrade?pid=${result.participantId}`)
       return
     }
 

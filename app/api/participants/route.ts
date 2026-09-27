@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       { first_name, email, gender, age },
       { onConflict: 'email' }
     )
-    .select('id')
+    .select('id, has_paid')
     .single()
 
   if (participantError) {
@@ -50,7 +50,23 @@ export async function POST(request: Request) {
     return Response.json({ participantId: participant.id, attemptId: existingAttempt.id })
   }
 
-  // No in_progress attempt — create one
+  // No in_progress attempt — check if they've completed one before (requires payment to retest)
+  const { data: completedAttempt } = await supabase
+    .from('decathlon_attempts')
+    .select('id')
+    .eq('participant_id', participant.id)
+    .eq('status', 'completed')
+    .limit(1)
+    .maybeSingle()
+
+  if (completedAttempt && !participant.has_paid) {
+    return Response.json(
+      { requiresPayment: true, participantId: participant.id },
+      { status: 402 }
+    )
+  }
+
+  // No completed attempt, or participant has paid — create new attempt
   const { data: newAttempt, error: attemptError } = await supabase
     .from('decathlon_attempts')
     .insert({ participant_id: participant.id, age_at_test: age, gender })

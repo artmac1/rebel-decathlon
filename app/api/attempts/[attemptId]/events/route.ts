@@ -27,7 +27,30 @@ export async function POST(
     return Response.json({ error: 'Attempt not found' }, { status: 404 })
   }
 
-  const wasAlreadyComplete = attempt.status === 'completed'
+  // Seal completed attempts — no further submissions allowed
+  if (attempt.status === 'completed') {
+    return Response.json(
+      { error: 'This assessment is complete. Start a new attempt to retest.' },
+      { status: 403 }
+    )
+  }
+
+  // Check retake limit for this event (max 2 submissions: initial + one retake)
+  const { data: existingResult } = await supabase
+    .from('event_results')
+    .select('submission_count')
+    .eq('attempt_id', attemptId)
+    .eq('event_key', eventKey)
+    .maybeSingle()
+
+  if (existingResult && (existingResult.submission_count ?? 1) >= 2) {
+    return Response.json(
+      { error: 'Retake limit reached for this event.' },
+      { status: 403 }
+    )
+  }
+
+  const wasAlreadyComplete = false
 
   // Score the event — throws if eventKey is unknown or rawInput is malformed
   let points: number
@@ -42,7 +65,8 @@ export async function POST(
     return Response.json({ error: String(err) }, { status: 400 })
   }
 
-  // Upsert so re-submitting an event overwrites the previous result
+  // Save result, incrementing submission_count so retake limits are enforced
+  const newSubmissionCount = existingResult ? (existingResult.submission_count ?? 1) + 1 : 1
   const { error: upsertError } = await supabase
     .from('event_results')
     .upsert(
@@ -52,6 +76,7 @@ export async function POST(
         raw_input: rawInput,
         points_earned: points,
         completed_at: new Date().toISOString(),
+        submission_count: newSubmissionCount,
       },
       { onConflict: 'attempt_id,event_key' }
     )

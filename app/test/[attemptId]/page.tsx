@@ -17,7 +17,7 @@ export default async function AttemptDashboard({
 
   const { data: attempt } = await supabase
     .from('decathlon_attempts')
-    .select('id, status, total_points, participants(first_name)')
+    .select('id, status, total_points, participant_id, participants(first_name)')
     .eq('id', attemptId)
     .single()
 
@@ -25,17 +25,22 @@ export default async function AttemptDashboard({
 
   const { data: eventResults } = await supabase
     .from('event_results')
-    .select('event_key, points_earned')
+    .select('event_key, points_earned, submission_count')
     .eq('attempt_id', attemptId)
 
   const resultsByKey = Object.fromEntries(
     (eventResults ?? []).map((r) => [r.event_key, r.points_earned])
   )
 
+  const submissionsByKey = Object.fromEntries(
+    (eventResults ?? []).map((r) => [r.event_key, r.submission_count ?? 1])
+  )
+
   const participants = attempt.participants as unknown as { first_name: string } | null
   const participantName = participants?.first_name ?? 'Participant'
   const completedCount = Object.keys(resultsByKey).length
   const isComplete = attempt.status === 'completed'
+  const participantId = attempt.participant_id
 
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-6 sm:py-10">
@@ -74,12 +79,14 @@ export default async function AttemptDashboard({
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Link
-                        href={`/test/${attemptId}/${key}`}
-                        className="text-xs text-gray-400 hover:text-gray-600"
-                      >
-                        Retake
-                      </Link>
+                      {!isComplete && (submissionsByKey[key] ?? 1) < 2 && (
+                        <Link
+                          href={`/test/${attemptId}/${key}`}
+                          className="text-xs text-gray-400 hover:text-gray-600"
+                        >
+                          Retake
+                        </Link>
+                      )}
                       <span className="text-sm font-semibold text-gray-900">{points} pts</span>
                     </div>
                   </div>
@@ -103,16 +110,24 @@ export default async function AttemptDashboard({
         </ol>
 
         {isComplete && (
-          <div className="mt-6 bg-green-50 border border-green-200 rounded-xl px-4 py-4 text-center">
-            <p className="text-green-800 font-semibold">Assessment complete!</p>
-            <p className="text-green-700 text-sm mt-1">
-              Total score: <strong>{attempt.total_points} / 100</strong>
-            </p>
+          <div className="mt-6 space-y-3">
+            <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-4 text-center">
+              <p className="text-green-800 font-semibold">Assessment complete!</p>
+              <p className="text-green-700 text-sm mt-1">
+                Total score: <strong>{attempt.total_points} / 100</strong>
+              </p>
+              <Link
+                href={`/results/${attemptId}`}
+                className="mt-3 inline-block text-sm text-green-700 underline"
+              >
+                View full results
+              </Link>
+            </div>
             <Link
-              href={`/results/${attemptId}`}
-              className="mt-3 inline-block text-sm text-green-700 underline"
+              href={`/upgrade?pid=${participantId}`}
+              className="flex items-center justify-center gap-2 w-full bg-gray-900 hover:bg-gray-700 text-white font-semibold rounded-xl px-4 py-4 text-sm transition-colors"
             >
-              View full results
+              Retest the full series — unlock lifetime access
             </Link>
           </div>
         )}
