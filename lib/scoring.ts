@@ -188,7 +188,16 @@ function extractValue(eventKey: string, rawInput: RawInput): number {
       return requireNumber(rawInput, 'reps', eventKey)
     case 'hr':
       return requireNumber(rawInput, 'bpm', eventKey)
-    case 'balance':
+    case 'balance': {
+      // New format: right_seconds + left_seconds → score on the weaker (lower) leg
+      if ('right_seconds' in rawInput && 'left_seconds' in rawInput) {
+        const right = requireNumber(rawInput, 'right_seconds', eventKey)
+        const left = requireNumber(rawInput, 'left_seconds', eventKey)
+        return Math.min(right, left)
+      }
+      // Legacy fallback for records stored before the two-leg update
+      return requireNumber(rawInput, 'seconds', eventKey)
+    }
     case 'arm_hang':
     case 'speed':
       return requireNumber(rawInput, 'seconds', eventKey)

@@ -95,12 +95,12 @@ export const EVENT_INSTRUCTIONS: Record<string, EventInstruction> = {
     displayName: 'Stork Test (Balance)',
     vimeoId: '1219533938',
     instructions: [
-      'Remove your shoes. Choose which leg to stand on — typically the dominant side produces a better score, but try both if needed.',
-      'Place your hands on your hips. Raise the non-standing foot and rest it against the inside of the standing knee.',
-      'Close your eyes and hold the position as long as possible. The clock stops when the raised foot touches the ground or the hands leave the hips.',
-      'Record the best time in seconds.',
+      'Remove your shoes. Stand near a wall or chair for safety, but do not touch it during the test.',
+      'Place your hands on your hips. Raise one foot off the ground and extend that leg straight out in front of you.',
+      'Keep your eyes open and fix your gaze on a point straight ahead. Hold the position as long as possible. The clock stops when the raised foot touches the ground or the hands leave the hips.',
+      'Test both legs and record the hold time in seconds for each.',
     ],
-    note: 'Multiple trials may be needed to determine which leg produces the better score.',
+    note: 'Your score is based on your weaker leg — the one with the shorter hold time. This gives you an honest picture of any left-right imbalance and tells you exactly which side to focus on.',
   },
 
   speed: {

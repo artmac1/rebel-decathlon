@@ -108,6 +108,22 @@ function SecondsFields({ label }: { label: string }) {
   return <NumberField name="seconds" label={label} min={0} max={600} />
 }
 
+function BalanceFields() {
+  return (
+    <div className="space-y-4">
+      <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+        <p className="text-sm font-semibold text-gray-700">Right leg</p>
+        <NumberField name="right_seconds" label="Hold time (seconds)" min={0} max={600} step={0.1} />
+      </div>
+      <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+        <p className="text-sm font-semibold text-gray-700">Left leg</p>
+        <NumberField name="left_seconds" label="Hold time (seconds)" min={0} max={600} step={0.1} />
+      </div>
+      <p className="text-xs text-gray-500">Your score is based on the weaker leg (lower time).</p>
+    </div>
+  )
+}
+
 function SpeedFields() {
   return (
     <div className="space-y-3">
@@ -228,7 +244,10 @@ function buildRawInput(eventKey: string, form: HTMLFormElement): Record<string, 
         recovery_bpm: parseInt(get('recovery_bpm')!.value, 10),
       }
     case 'balance':
-      return { seconds: parseFloat(get('seconds')!.value) }
+      return {
+        right_seconds: parseFloat(get('right_seconds')!.value),
+        left_seconds: parseFloat(get('left_seconds')!.value),
+      }
     case 'arm_hang':
       return { seconds: parseFloat(get('seconds')!.value) }
     case 'speed': {
@@ -325,7 +344,7 @@ export default function EventForm({ attemptId, eventKey }: Props) {
       {eventKey === 'whr' && <WhrFields />}
       {(eventKey === 'pushup' || eventKey === 'squat' || eventKey === 'situp') && <RepsFields />}
       {eventKey === 'hr' && <HrFields />}
-      {eventKey === 'balance' && <SecondsFields label="Hold time (seconds)" />}
+      {eventKey === 'balance' && <BalanceFields />}
       {eventKey === 'arm_hang' && <SecondsFields label="Hang time (seconds)" />}
       {eventKey === 'speed' && <SpeedFields />}
       {eventKey === 'sit_rise' && <SitRiseFields />}

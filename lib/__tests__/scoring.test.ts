@@ -298,37 +298,43 @@ describe('Sit-Rise', () => {
 // ---------------------------------------------------------------------------
 describe('Balance', () => {
   // Mid-band
-  it('30 seconds → 5 pts (25-39 = average)', () => {
-    expect(scoreEvent('balance', { seconds: 30 }, 55, 'male')).toBe(5)
+  it('30 seconds (both legs) → 5 pts (25-39 = average)', () => {
+    expect(scoreEvent('balance', { right_seconds: 30, left_seconds: 35 }, 55, 'male')).toBe(5)
   })
-  it('45 seconds → 7.5 pts (40-49 = good)', () => {
-    expect(scoreEvent('balance', { seconds: 45 }, 55, 'female')).toBe(7.5)
+  it('45 seconds (both legs) → 7.5 pts (40-49 = good)', () => {
+    expect(scoreEvent('balance', { right_seconds: 50, left_seconds: 45 }, 55, 'female')).toBe(7.5)
   })
-  it('15 seconds → 2.5 pts (10-24 = fair)', () => {
-    expect(scoreEvent('balance', { seconds: 15 }, 55, 'male')).toBe(2.5)
+  it('15 seconds (both legs) → 2.5 pts (10-24 = fair)', () => {
+    expect(scoreEvent('balance', { right_seconds: 15, left_seconds: 20 }, 55, 'male')).toBe(2.5)
+  })
+
+  // Weaker-leg logic
+  it('scores on weaker leg: right 20s, left 50s → 2.5 pts (right is weaker)', () => {
+    expect(scoreEvent('balance', { right_seconds: 20, left_seconds: 50 }, 55, 'male')).toBe(2.5)
+  })
+  it('scores on weaker leg: right 50s, left 20s → 2.5 pts (left is weaker)', () => {
+    expect(scoreEvent('balance', { right_seconds: 50, left_seconds: 20 }, 55, 'male')).toBe(2.5)
   })
 
   // Boundaries (confirmed: 50 seconds = 10 pts, corrected from sheet error of 51)
   it('boundary: 50 seconds → 10 pts (confirmed excellent threshold)', () => {
-    expect(scoreEvent('balance', { seconds: 50 }, 55, 'male')).toBe(10)
+    expect(scoreEvent('balance', { right_seconds: 50, left_seconds: 50 }, 55, 'male')).toBe(10)
   })
   it('boundary: 49 seconds → 7.5 pts (below 50 threshold)', () => {
-    expect(scoreEvent('balance', { seconds: 49 }, 55, 'male')).toBe(7.5)
+    expect(scoreEvent('balance', { right_seconds: 49, left_seconds: 49 }, 55, 'male')).toBe(7.5)
   })
   it('boundary: 10 seconds → 2.5 pts (fair threshold)', () => {
-    expect(scoreEvent('balance', { seconds: 10 }, 55, 'male')).toBe(2.5)
+    expect(scoreEvent('balance', { right_seconds: 10, left_seconds: 10 }, 55, 'male')).toBe(2.5)
   })
   it('boundary: 9 seconds → 0 pts (below 10 threshold)', () => {
-    expect(scoreEvent('balance', { seconds: 9 }, 55, 'male')).toBe(0)
+    expect(scoreEvent('balance', { right_seconds: 9, left_seconds: 9 }, 55, 'male')).toBe(0)
   })
 
-  it('throws for missing seconds', () => {
+  it('throws for missing right_seconds/left_seconds (and no legacy seconds)', () => {
     expect(() => scoreEvent('balance', {}, 55, 'male')).toThrow(/seconds/)
   })
-  it('throws for negative seconds', () => {
-    // -1 falls below all thresholds — vlookup returns 0, not a throw.
-    // Negative is physically impossible but not structurally invalid; engine returns 0.
-    expect(scoreEvent('balance', { seconds: -1 }, 55, 'male')).toBe(0)
+  it('legacy fallback: { seconds } still scores correctly', () => {
+    expect(scoreEvent('balance', { seconds: 30 }, 55, 'male')).toBe(5)
   })
 })
 
@@ -524,7 +530,7 @@ describe('scoreDecathlon', () => {
     hr: { bpm: 100, recovery_bpm: 75 },                 // bpm_score=4 + drop 25 → 3 = 7 pts
     situp: { reps: 77 },                                // age 55 → 5 pts
     sit_rise: { sitting_supports: 0, rising_supports: 0 }, // → 10 pts
-    balance: { seconds: 30 },                           // → 5 pts
+    balance: { right_seconds: 30, left_seconds: 35 },   // weaker leg = 30s → 5 pts
     speed: { seconds: 900 },                            // male, age 55 (50-59: ≤912=5) → 5 pts
     arm_hang: { seconds: 60 },                          // male → 5 pts
     flexibility: {
