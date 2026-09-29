@@ -72,7 +72,7 @@ export async function sendResultsEmail(
     }
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL ?? 'results@rebelworkout.com',
+      from: process.env.RESEND_FROM_EMAIL ?? 'info@successfulaging.academy',
       to: email,
       subject: `${payload.participantName}'s Rebel Decathlon Results${payload.completedAt ? ` — ${payload.completedAt}` : ''}`,
       html,

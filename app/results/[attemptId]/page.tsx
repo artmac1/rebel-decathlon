@@ -5,6 +5,9 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import EmailResultsForm from './EmailResultsForm'
 import PrintButton from './PrintButton'
+import CustomProgramCard from './CustomProgramCard'
+import CoachingCard from './CoachingCard'
+import { selectProgram } from '@/lib/programs'
 
 // ─── Band labels (every 10-point range) ─────────────────────────────────────
 
@@ -237,6 +240,10 @@ export default async function ResultsPage({
   const secondaryFocus = scores.filter((s) => s.points <= 4 && s.points > minScore)
   const strengths = [...scores].sort((a, b) => b.points - a.points).slice(0, 2)
 
+  // Bottom 3 for program selection
+  const bottom3 = [...scores].sort((a, b) => a.points - b.points).slice(0, 3)
+  const program = selectProgram(bottom3.map((s) => s.key))
+
   // Prior total (for summary delta)
   const priorTotal = priorAttempt
     ? Number(priorAttempt.total_points ?? Object.values(priorByKey).reduce((s, p) => s + p, 0))
@@ -251,9 +258,6 @@ export default async function ResultsPage({
     attemptId,
     scores: scores.map((s) => ({ label: s.label, points: s.points })),
   }
-
-  const bookingUrl = process.env.BOOKING_URL ?? '#'
-  const weakestEventLabel = primaryFocus[0]?.label ?? 'your lowest-scoring event'
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -458,28 +462,20 @@ export default async function ResultsPage({
         {/* ── Email results ── */}
         <EmailResultsForm payload={emailPayload} />
 
-        {/* ── CTA card ── */}
-        <div className="bg-white border border-gray-200 rounded-2xl px-5 py-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">Turn your results into a plan</h2>
-          <p className="text-sm text-gray-600 leading-relaxed mb-5">
-            Your {weakestEventLabel} score is your biggest opportunity right now. That&apos;s not a
-            criticism — it&apos;s a target. The fastest way to move that number is to stop guessing
-            and put a structured plan in place. That&apos;s exactly what we do together.
-          </p>
-          <div className="flex gap-3">
-            {/* Print makes no sense on a phone — hide it on small screens */}
-            <div className="hidden sm:block">
-              <PrintButton />
-            </div>
-            <Link
-              href={bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-xl bg-gray-900 px-4 py-4 text-base font-medium text-white text-center hover:bg-gray-700 transition-colors"
-            >
-              Book a session →
-            </Link>
-          </div>
+        {/* ── Custom program CTA ── */}
+        <CustomProgramCard
+          program={program}
+          bottom3={bottom3}
+          attemptId={attemptId}
+          participantId={attempt.participant_id}
+        />
+
+        {/* ── 1-on-1 coaching CTA ── */}
+        <CoachingCard bookingUrl={process.env.BOOKING_URL ?? '#'} />
+
+        {/* ── Print (hidden on mobile) ── */}
+        <div className="hidden sm:block">
+          <PrintButton />
         </div>
 
         {/* ── Progress history link ── */}

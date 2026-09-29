@@ -36,7 +36,7 @@ export default async function ProgressPage() {
       <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="w-full max-w-sm space-y-5">
           <div className="flex justify-center">
-            <Image src="/saa-icon.png" alt="Successful Aging Academy" width={48} height={48} />
+            <Image src="/saa-logo.png" alt="Successful Aging Academy" width={240} height={96} priority />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Your progress</h1>
@@ -79,9 +79,11 @@ export default async function ProgressPage() {
       <div className="max-w-lg mx-auto px-4 py-8 space-y-4">
 
         {/* Header */}
+        <div className="flex justify-center">
+          <Image src="/saa-logo.png" alt="Successful Aging Academy" width={200} height={80} priority />
+        </div>
         <div className="flex items-start justify-between">
           <div>
-            <Image src="/saa-icon.png" alt="Successful Aging Academy" width={40} height={40} className="mb-3" />
             <h1 className="text-2xl font-bold text-gray-900">
               {participant ? `${participant.first_name}'s progress` : 'Your progress'}
             </h1>
