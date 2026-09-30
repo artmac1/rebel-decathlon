@@ -22,19 +22,25 @@ export async function POST(request: Request) {
 
   const origin = new URL(request.url).origin
 
-  const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    line_items: [
-      {
-        price: process.env.STRIPE_PRO_PRICE_ID,
-        quantity: 1,
-      },
-    ],
-    customer_email: participant.email,
-    metadata: { participantId: participant.id },
-    success_url: `${origin}/upgrade/success`,
-    cancel_url: `${origin}/upgrade?pid=${participant.id}&cancelled=1`,
-  })
+  let session: Awaited<ReturnType<typeof stripe.checkout.sessions.create>>
+  try {
+    session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: [
+        {
+          price: process.env.STRIPE_PRO_PRICE_ID,
+          quantity: 1,
+        },
+      ],
+      customer_email: participant.email,
+      metadata: { participantId: participant.id },
+      success_url: `${origin}/upgrade/success`,
+      cancel_url: `${origin}/upgrade?pid=${participant.id}&cancelled=1`,
+    })
+  } catch (err) {
+    console.error('Stripe checkout session error:', err)
+    return Response.json({ error: 'Payment setup failed. Please try again.' }, { status: 500 })
+  }
 
   return Response.json({ url: session.url })
 }

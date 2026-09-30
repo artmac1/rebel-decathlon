@@ -16,21 +16,31 @@ export default function UpgradeContent() {
     setLoading(true)
     setError(null)
 
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ participantId }),
-    })
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ participantId }),
+      })
 
-    const result = await response.json()
+      let result: { url?: string; error?: string } = {}
+      try {
+        result = await response.json()
+      } catch {
+        // response body wasn't JSON (e.g. 500 HTML page)
+      }
 
-    if (!response.ok || !result.url) {
-      setError(result.error ?? 'Something went wrong. Please try again.')
+      if (!response.ok || !result.url) {
+        setError(result.error ?? 'Something went wrong. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      window.location.href = result.url
+    } catch (err) {
+      setError(`Network error — please try again. (${err})`)
       setLoading(false)
-      return
     }
-
-    window.location.href = result.url
   }
 
   return (
